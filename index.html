@@ -1,0 +1,2668 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UNODC Bolivia | Marco de Monitoreo — Programa de Desarrollo Alternativo</title>
+  <!-- Tipografía corporativa limpia inspirada en normas UNODC (Inter / Roboto) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Chart.js y DataLabels para Storytelling with Data -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
+
+  <style>
+    :root {
+      /* Paleta Monocromática Sobria UNODC + Storytelling with Data */
+      --un-navy: #0B2545;
+      --un-blue: #005BBB;
+      --un-cyan: #009EDB;
+      --un-sky: #E0F2FE;
+      --un-ice: #F0F7FF;
+      --slate-900: #0F172A;
+      --slate-800: #1E293B;
+      --slate-700: #334155;
+      --slate-600: #475569;
+      --slate-500: #64748B;
+      --slate-400: #94A3B8;
+      --slate-300: #CBD5E1;
+      --slate-200: #E2E8F0;
+      --slate-100: #F1F5F9;
+      --bg-page: #F4F7FA;
+      --card-bg: #FFFFFF;
+      /* Acentos preatentivos sobrios */
+      --accent-achieved: #005BBB;
+      --accent-progress: #009EDB;
+      --accent-scheduled: #64748B;
+      --accent-alert: #B45309;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: var(--bg-page);
+      color: var(--slate-900);
+      line-height: 1.48;
+      padding-bottom: 48px;
+    }
+
+    /* BANNER SUPERIOR DE GOBERNANZA Y SEGURIDAD */
+    .security-bar {
+      background: var(--un-navy);
+      color: #E2E8F0;
+      padding: 7px 28px;
+      font-size: 0.74rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid var(--un-cyan);
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .security-bar strong {
+      color: #FFFFFF;
+      font-weight: 700;
+    }
+
+    /* CABECERA INSTITUCIONAL UNODC */
+    .main-header {
+      background: var(--card-bg);
+      padding: 16px 28px;
+      border-bottom: 1px solid var(--slate-200);
+      box-shadow: 0 2px 10px rgba(11, 37, 69, 0.04);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 18px;
+    }
+
+    .brand-left {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .logo-box {
+      display: flex;
+      align-items: center;
+      height: 58px;
+    }
+
+    .logo-box img {
+      max-height: 56px;
+      width: auto;
+      object-fit: contain;
+    }
+
+    .brand-divider {
+      width: 2px;
+      height: 44px;
+      background: var(--slate-200);
+    }
+
+    .header-titles .kicker {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--un-blue);
+    }
+
+    .header-titles h1 {
+      font-size: 1.26rem;
+      font-weight: 800;
+      color: var(--un-navy);
+      letter-spacing: -0.02em;
+      margin-top: 2px;
+    }
+
+    .header-titles p {
+      font-size: 0.8rem;
+      color: var(--slate-600);
+      font-weight: 500;
+    }
+
+    .header-meta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .meta-badge {
+      background: var(--slate-100);
+      border: 1px solid var(--slate-200);
+      border-radius: 6px;
+      padding: 6px 11px;
+      font-size: 0.73rem;
+      color: var(--slate-600);
+    }
+
+    .meta-badge strong {
+      color: var(--un-navy);
+    }
+
+    .btn-logo-loader {
+      background: var(--un-ice);
+      border: 1px solid #BAE6FD;
+      color: var(--un-blue);
+      padding: 6px 11px;
+      border-radius: 6px;
+      font-size: 0.73rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .btn-logo-loader:hover {
+      background: var(--un-sky);
+    }
+
+    /* BARRA DE FILTROS DE PROYECTO (POR NOMBRE OFICIAL DE PROYECTO) */
+    .project-selector-bar {
+      background: #FFFFFF;
+      border-bottom: 1px solid var(--slate-200);
+      padding: 12px 28px;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.04);
+    }
+
+    .selector-inner {
+      max-width: 1840px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .selector-label {
+      font-size: 0.74rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: var(--slate-500);
+      letter-spacing: 0.04em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .project-buttons {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      flex: 1;
+    }
+
+    .proj-btn {
+      flex: 1;
+      min-width: 260px;
+      background: var(--slate-100);
+      border: 1.5px solid var(--slate-200);
+      border-radius: 8px;
+      padding: 10px 14px;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.18s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .proj-btn:hover {
+      border-color: var(--un-cyan);
+      background: var(--un-ice);
+    }
+
+    .proj-btn.active {
+      background: var(--un-navy);
+      border-color: var(--un-navy);
+      color: #FFFFFF;
+      box-shadow: 0 4px 12px rgba(11, 37, 69, 0.18);
+    }
+
+    .proj-btn .btn-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.69rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--un-blue);
+    }
+
+    .proj-btn.active .btn-top {
+      color: var(--un-cyan);
+    }
+
+    .proj-btn .btn-title {
+      font-size: 0.81rem;
+      font-weight: 700;
+      color: var(--slate-900);
+      line-height: 1.28;
+    }
+
+    .proj-btn.active .btn-title {
+      color: #FFFFFF;
+    }
+
+    .proj-btn .btn-meta {
+      font-size: 0.71rem;
+      color: var(--slate-500);
+    }
+
+    .proj-btn.active .btn-meta {
+      color: var(--slate-300);
+    }
+
+    /* CONTENEDOR PRINCIPAL */
+    .container {
+      max-width: 1840px;
+      margin: 0 auto;
+      padding: 20px 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+    }
+
+    /* ENCABEZADO DE SECCIÓN */
+    .section-banner {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      border-bottom: 2px solid var(--un-navy);
+      padding-bottom: 8px;
+      margin-top: 6px;
+    }
+
+    .section-banner .sec-kicker {
+      font-size: 0.7rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: var(--un-blue);
+      letter-spacing: 0.06em;
+    }
+
+    .section-banner h2 {
+      font-size: 1.12rem;
+      font-weight: 800;
+      color: var(--un-navy);
+    }
+
+    .section-banner .sec-note {
+      font-size: 0.76rem;
+      color: var(--slate-600);
+      font-weight: 500;
+    }
+
+    /* BANNER NARRATIVO DE PROYECTO ACTIVO */
+    .active-project-banner {
+      background: linear-gradient(135deg, #0B2545 0%, #004792 100%);
+      color: #FFFFFF;
+      border-radius: 10px;
+      padding: 16px 22px;
+      display: grid;
+      grid-template-columns: 2.8fr 1.6fr;
+      gap: 20px;
+      align-items: center;
+      box-shadow: 0 4px 14px rgba(11, 37, 69, 0.12);
+    }
+
+    .active-project-banner .ap-tag {
+      display: inline-block;
+      background: rgba(0, 158, 219, 0.25);
+      border: 1px solid var(--un-cyan);
+      color: #E0F2FE;
+      font-size: 0.69rem;
+      font-weight: 700;
+      padding: 2px 9px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 6px;
+    }
+
+    .active-project-banner h3 {
+      font-size: 1.02rem;
+      font-weight: 800;
+      color: #FFFFFF;
+      margin-bottom: 5px;
+      line-height: 1.3;
+    }
+
+    .active-project-banner p {
+      font-size: 0.82rem;
+      color: #E2E8F0;
+      line-height: 1.48;
+    }
+
+    .ap-pills {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    .ap-pill {
+      background: rgba(255, 255, 255, 0.09);
+      border-left: 3px solid var(--un-cyan);
+      padding: 8px 12px;
+      border-radius: 6px;
+    }
+
+    .ap-pill .p-lbl {
+      font-size: 0.67rem;
+      text-transform: uppercase;
+      color: #CBD5E1;
+      letter-spacing: 0.03em;
+    }
+
+    .ap-pill .p-val {
+      font-size: 0.96rem;
+      font-weight: 800;
+      color: #FFFFFF;
+      margin-top: 2px;
+    }
+
+    /* BANDA DE 6 KPIs EJECUTIVOS */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 14px;
+    }
+
+    .kpi-card {
+      background: var(--card-bg);
+      border: 1px solid var(--slate-200);
+      border-top: 4px solid var(--un-blue);
+      border-radius: 8px;
+      padding: 14px 16px;
+      box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .kpi-card.cyan-top { border-top-color: var(--un-cyan); }
+    .kpi-card.navy-top { border-top-color: var(--un-navy); }
+    .kpi-card.slate-top { border-top-color: var(--slate-600); }
+
+    .kpi-title {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--slate-500);
+      letter-spacing: 0.03em;
+    }
+
+    .kpi-main-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 6px;
+      margin: 7px 0 5px 0;
+    }
+
+    .kpi-num {
+      font-size: 1.52rem;
+      font-weight: 800;
+      color: var(--un-navy);
+      letter-spacing: -0.02em;
+    }
+
+    .kpi-badge {
+      font-size: 0.69rem;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 4px;
+      background: var(--un-ice);
+      color: var(--un-blue);
+      white-space: nowrap;
+    }
+
+    .kpi-foot {
+      font-size: 0.73rem;
+      color: var(--slate-600);
+      line-height: 1.35;
+    }
+
+    /* GRILLA DE GRÁFICOS STORYTELLING WITH DATA */
+    .charts-row {
+      display: grid;
+      grid-template-columns: 1.1fr 1.15fr 1.15fr;
+      gap: 16px;
+    }
+
+    .fin-phys-row {
+      display: grid;
+      grid-template-columns: 1.25fr 1.25fr 1fr;
+      gap: 16px;
+    }
+
+    .card-panel {
+      background: var(--card-bg);
+      border: 1px solid var(--slate-200);
+      border-radius: 10px;
+      padding: 16px 18px;
+      box-shadow: 0 1px 4px rgba(15, 23, 42, 0.03);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .panel-head {
+      border-bottom: 1px solid var(--slate-100);
+      padding-bottom: 9px;
+      margin-bottom: 12px;
+    }
+
+    .panel-kicker {
+      font-size: 0.67rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: var(--un-cyan);
+      letter-spacing: 0.05em;
+      margin-bottom: 2px;
+    }
+
+    .panel-action-title {
+      font-size: 0.91rem;
+      font-weight: 700;
+      color: var(--un-navy);
+      line-height: 1.3;
+    }
+
+    .panel-sub {
+      font-size: 0.74rem;
+      color: var(--slate-500);
+      margin-top: 3px;
+    }
+
+    .chart-box {
+      position: relative;
+      flex: 1;
+      min-height: 255px;
+      width: 100%;
+    }
+
+    .panel-footer {
+      margin-top: 10px;
+      padding-top: 8px;
+      border-top: 1px dashed var(--slate-200);
+      font-size: 0.72rem;
+      color: var(--slate-600);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* TARJETA DE SÍNTESIS EJECUTIVA FÍSICO-FINANCIERA */
+    .exec-analysis-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      flex: 1;
+      justify-content: center;
+    }
+
+    .exec-item {
+      background: var(--slate-100);
+      border-left: 3.5px solid var(--un-blue);
+      border-radius: 6px;
+      padding: 10px 12px;
+    }
+
+    .exec-item.cyan { border-left-color: var(--un-cyan); }
+    .exec-item.navy { border-left-color: var(--un-navy); }
+
+    .exec-item h4 {
+      font-size: 0.78rem;
+      font-weight: 800;
+      color: var(--un-navy);
+      margin-bottom: 3px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .exec-item p {
+      font-size: 0.74rem;
+      color: var(--slate-700);
+      line-height: 1.42;
+    }
+
+    /* APARTADO 2: MARCO DE MONITOREO (CADENA DE RESULTADOS 100% INDICADORES) */
+    .monitoring-framework-card {
+      background: var(--card-bg);
+      border: 1px solid var(--slate-200);
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+    }
+
+    .mf-summary-strip {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 12px;
+      margin-bottom: 16px;
+      background: var(--slate-100);
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid var(--slate-200);
+    }
+
+    .mf-stat {
+      background: #FFFFFF;
+      border-radius: 6px;
+      padding: 9px 12px;
+      border-left: 3px solid var(--un-blue);
+    }
+
+    .mf-stat .s-lbl {
+      font-size: 0.68rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--slate-500);
+    }
+
+    .mf-stat .s-val {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--un-navy);
+      margin-top: 2px;
+    }
+
+    .mf-toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 14px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--slate-200);
+    }
+
+    .level-filters {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .lvl-btn {
+      background: var(--slate-100);
+      border: 1px solid var(--slate-200);
+      color: var(--slate-700);
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 0.74rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .lvl-btn:hover {
+      background: var(--un-ice);
+      border-color: var(--un-cyan);
+    }
+
+    .lvl-btn.active {
+      background: var(--un-blue);
+      color: #FFFFFF;
+      border-color: var(--un-blue);
+    }
+
+    .search-box {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .search-input {
+      padding: 6px 12px;
+      border: 1px solid var(--slate-300);
+      border-radius: 6px;
+      font-size: 0.76rem;
+      min-width: 250px;
+    }
+
+    .btn-export {
+      background: var(--un-navy);
+      color: #FFFFFF;
+      border: none;
+      padding: 7px 12px;
+      border-radius: 6px;
+      font-size: 0.74rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .btn-export:hover {
+      background: var(--un-blue);
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      max-height: 680px;
+      overflow-y: auto;
+      border: 1px solid var(--slate-200);
+      border-radius: 8px;
+    }
+
+    table.mf-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.76rem;
+      text-align: left;
+    }
+
+    table.mf-table thead th {
+      position: sticky;
+      top: 0;
+      background: var(--un-navy);
+      color: #FFFFFF;
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 0.67rem;
+      letter-spacing: 0.04em;
+      padding: 10px 11px;
+      z-index: 10;
+      border-right: 1px solid rgba(255,255,255,0.08);
+    }
+
+    table.mf-table tbody tr {
+      border-bottom: 1px solid var(--slate-200);
+      transition: background 0.12s;
+    }
+
+    table.mf-table tbody tr:hover {
+      background: var(--un-ice);
+    }
+
+    table.mf-table tbody tr.chain-group-row {
+      background: #E2E8F0;
+      font-weight: 800;
+      color: var(--un-navy);
+    }
+
+    table.mf-table td {
+      padding: 9px 11px;
+      vertical-align: middle;
+    }
+
+    .badge-level {
+      display: inline-block;
+      padding: 2px 7px;
+      border-radius: 4px;
+      font-size: 0.66rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .lvl-obj { background: var(--un-navy); color: #FFFFFF; }
+    .lvl-res { background: var(--un-blue); color: #FFFFFF; }
+    .lvl-prod { background: var(--un-sky); color: var(--un-navy); border: 1px solid #7DD3FC; }
+
+    .proj-pill-sm {
+      display: inline-block;
+      padding: 2px 7px;
+      border-radius: 4px;
+      font-size: 0.66rem;
+      font-weight: 700;
+      background: var(--slate-100);
+      color: var(--slate-700);
+      border: 1px solid var(--slate-300);
+    }
+
+    .prog-cell {
+      width: 135px;
+    }
+
+    .prog-bar-wrap {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .prog-track {
+      flex: 1;
+      height: 7px;
+      background: var(--slate-200);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .prog-fill {
+      height: 100%;
+      border-radius: 4px;
+    }
+
+    .prog-pct {
+      font-size: 0.72rem;
+      font-weight: 800;
+      min-width: 40px;
+      text-align: right;
+    }
+
+    .st-pill {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 0.67rem;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .st-achieved { background: #DBEAFE; color: #1E40AF; }
+    .st-progress { background: #E0F2FE; color: #0369A1; }
+    .st-scheduled { background: #F1F5F9; color: #475569; border: 1px solid #CBD5E1; }
+
+    /* FOOTER */
+    .footer-bar {
+      margin-top: 10px;
+      background: var(--un-navy);
+      color: #CBD5E1;
+      border-radius: 8px;
+      padding: 14px 22px;
+      font-size: 0.74rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    @media (max-width: 1400px) {
+      .kpi-grid { grid-template-columns: repeat(3, 1fr); }
+      .charts-row, .fin-phys-row { grid-template-columns: 1fr; }
+      .active-project-banner { grid-template-columns: 1fr; }
+      .mf-summary-strip { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- BANNER SUPERIOR DE GOBERNANZA Y SEGURIDAD DE LA INFORMACIÓN -->
+  <div class="security-bar">
+    <div>
+      <strong>UNODC BOLIVIA — PROGRAMA DE DESARROLLO ALTERNATIVO (MONITOREO RBM):</strong>
+      Datos consolidados de los Informes Anuales 2025–2026, Documentos de Proyecto (PRODOC) y Anexos Financieros. Información sensible anonimizada por seguridad de la información.
+    </div>
+    <div>Línea Gráfica: <strong>Identidad Corporativa UNODC • Storytelling with Data</strong></div>
+  </div>
+
+  <!-- CABECERA CON LOGO UNODC EN RUTA D:\UNODC\logo\UNODC-logo -->
+  <header class="main-header">
+    <div class="brand-left">
+      <div class="logo-box">
+        <img id="unodcLogo"
+             src="D:/UNODC/logo/UNODC-logo.png"
+             alt="Naciones Unidas - Oficina contra la Droga y el Delito"
+             onerror="tryAlternativeLogoPaths(this)" />
+      </div>
+      <div class="brand-divider"></div>
+      <div class="header-titles">
+        <div class="kicker">Oficina de las Naciones Unidas contra la Droga y el Delito (UNODC) — Oficina País Bolivia</div>
+        <h1>TABLERO DE MONITOREO — PROGRAMA DE DESARROLLO ALTERNATIVO EN LOS YUNGAS</h1>
+        <p>Seguimiento de Hitos, Cobertura Territorial, Ejecución Físico-Financiera y Cadena de Resultados (Objetivo • Resultados • Productos)</p>
+      </div>
+    </div>
+
+    <div class="header-meta">
+      <div class="meta-badge">Ruta Logo: <strong id="logoPathLabel">D:\UNODC\logo\UNODC-logo</strong></div>
+      <label class="btn-logo-loader" title="Seleccionar archivo UNODC-logo desde D:\UNODC\logo si el navegador restringe acceso local">
+        Cargar Logo (D:\UNODC\logo)
+        <input type="file" accept="image/*" style="display:none" onchange="handleManualLogo(event)" />
+      </label>
+      <div class="meta-badge">Corte de Avance: <strong>Cierre Gestión 2025 / Q1-2026</strong></div>
+    </div>
+  </header>
+
+  <!-- BARRA INTERACTIVA DE SELECCIÓN POR NOMBRE DE PROYECTO -->
+  <nav class="project-selector-bar">
+    <div class="selector-inner">
+      <div class="selector-label">Filtrar por Intervención:</div>
+      <div class="project-buttons">
+        <button class="proj-btn active" id="btn-ALL" onclick="selectProject('ALL')">
+          <div class="btn-top"><span>Programa Consolidado (2 Proyectos)</span><span>3 Municipios</span></div>
+          <div class="btn-title">Programa de Desarrollo Alternativo — Los Yungas de La Paz</div>
+          <div class="btn-meta">Alcance Meta: 2.000 Familias (1.500 KOICA + 500 UE) • Caranavi, Chulumani y La Asunta</div>
+        </button>
+
+        <button class="proj-btn" id="btn-KOICA" onclick="selectProject('KOICA')">
+          <div class="btn-top"><span>Donante: KOICA (USD 8.132.000 UNODC)</span><span>Caranavi • Chulumani • La Asunta</span></div>
+          <div class="btn-title">Fortalecimiento de las economías locales y control de la expansión de cultivos excedentarios de coca en Los Yungas</div>
+          <div class="btn-meta">Alcance Meta: 1.500 Familias Beneficiarias • 223 seleccionadas en 2025 (+39 en 2da conv.) • 21 Indicadores</div>
+        </button>
+
+        <button class="proj-btn" id="btn-EU" onclick="selectProject('EU')">
+          <div class="btn-top"><span>Donante: Unión Europea (EUR 2.000.000)</span><span>Municipio: La Asunta</span></div>
+          <div class="btn-title">Sistemas Agroecológicos Sostenibles en el Municipio de La Asunta</div>
+          <div class="btn-meta">Alcance Meta: 500 Familias Beneficiarias (450 UPF EDISC / 550 capacitados) • 130 nuevas + 202 cont. • 16 Indicadores</div>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container">
+
+    <!-- =================================================================== -->
+    <!-- APARTADO 1: MIRADA GENERAL DE HITOS, FAMILIAS, MUNICIPIOS Y FINANZAS -->
+    <!-- =================================================================== -->
+    <div class="section-banner">
+      <div>
+        <div class="sec-kicker">Apartado 1 • Mirada Estratégica General y Apreciación Físico-Financiera</div>
+        <h2>Hitos Principales del Programa, Familias Beneficiarias, Cobertura Municipal y Ejecución Presupuestaria</h2>
+      </div>
+      <div class="sec-note" id="activeFilterIndicator">Mostrando: Programa Consolidado (Ambos Proyectos)</div>
+    </div>
+
+    <!-- BANNER NARRATIVO DINÁMICO SEGÚN PROYECTO SELECCIONADO -->
+    <section class="active-project-banner">
+      <div>
+        <span class="ap-tag" id="bannerTag">Visión Integrada del Programa de Desarrollo Alternativo</span>
+        <h3 id="bannerTitle">Articulación de Sistemas Agroforestales y Agroecológicos de Café en Los Yungas de La Paz</h3>
+        <p id="bannerDesc">
+          El Programa de Desarrollo Alternativo de UNODC en Bolivia articula dos intervenciones complementarias: <strong>1) «Fortalecimiento de las economías locales y control de la expansión de cultivos excedentarios de coca a través del mejoramiento de la productividad y comercialización de café en sistemas agroforestales en Los Yungas»</strong> (financiado por KOICA con <strong>USD 8.132.000</strong> para UNODC, alcance de <strong>1.500 familias</strong> en <strong>Caranavi, Chulumani y La Asunta</strong>) y <strong>2) «Sistemas Agroecológicos Sostenibles en el Municipio de La Asunta»</strong> (financiado por la Unión Europea con <strong>EUR 2.000.000</strong>, alcance de <strong>500 familias</strong> exclusivamente en <strong>La Asunta</strong>).
+        </p>
+      </div>
+      <div class="ap-pills">
+        <div class="ap-pill">
+          <div class="p-lbl">Alcance Meta de Familias</div>
+          <div class="p-val" id="pillFamilies">2.000 Familias (1.500 + 500)</div>
+        </div>
+        <div class="ap-pill">
+          <div class="p-lbl">Municipios de Intervención</div>
+          <div class="p-val" id="pillMunicipalities">Caranavi, Chulumani y La Asunta</div>
+        </div>
+        <div class="ap-pill">
+          <div class="p-lbl">Presupuesto Asignado UNODC</div>
+          <div class="p-val" id="pillBudget">USD 8.132.000 + EUR 2.000.000</div>
+        </div>
+        <div class="ap-pill">
+          <div class="p-lbl">Contraparte Gubernamental</div>
+          <div class="p-val" id="pillCounterpart">MDPRyA (ex MDRyT) / VCDI</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- BANDA DE 6 TARJETAS KPI DINÁMICAS -->
+    <section class="kpi-grid">
+      <div class="kpi-card navy-top">
+        <div class="kpi-title">Alcance Meta Familias Beneficiarias</div>
+        <div class="kpi-main-row">
+          <div class="kpi-num" id="kpiTargetFam">2.000</div>
+          <span class="kpi-badge" id="kpiTargetFamBadge">1.500 KOICA + 500 UE</span>
+        </div>
+        <div class="kpi-foot" id="kpiTargetFamSub">En 2025: 353 nuevas familias seleccionadas (223 KOICA + 130 UE) más 202 productores de continuidad en La Asunta.</div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-title">Municipios y Comunidades</div>
+        <div class="kpi-main-row">
+          <div class="kpi-num" id="kpiMuni">3 Municipios</div>
+          <span class="kpi-badge" id="kpiMuniBadge">Los Yungas (La Paz)</span>
+        </div>
+        <div class="kpi-foot" id="kpiMuniSub">KOICA: Caranavi, Chulumani y La Asunta (15 com. activas / 35 meta). UE: La Asunta (11 com. nuevas + 35 cont.).</div>
+      </div>
+
+      <div class="kpi-card cyan-top">
+        <div class="kpi-title">Viveros y Hectáreas en Desarrollo</div>
+        <div class="kpi-main-row">
+          <div class="kpi-num" id="kpiNurseries">141 Viveros</div>
+          <span class="kpi-badge" id="kpiNurseriesBadge">288,56 ha en curso</span>
+        </div>
+        <div class="kpi-foot" id="kpiNurseriesSub">26 sitios de almácigo/vivero en KOICA (204,4 ha verificadas) + 115 viveros en UE (84,16 ha agroecológicas).</div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-title">Seguridad Alimentaria (Huertos)</div>
+        <div class="kpi-main-row">
+          <div class="kpi-num" id="kpiGardens">188 Huertos</div>
+          <span class="kpi-badge" id="kpiGardensBadge">Hortalizas Familiares</span>
+        </div>
+        <div class="kpi-foot" id="kpiGardensSub">61 huertos implementados en KOICA (27,4% de seleccionados) + 127 huertos agroecológicos en UE (97,7%).</div>
+      </div>
+
+      <div class="kpi-card cyan-top">
+        <div class="kpi-title">Comercialización y Cadena de Valor</div>
+        <div class="kpi-main-row">
+          <div class="kpi-num" id="kpiSales">89,12 Tn</div>
+          <span class="kpi-badge" id="kpiSalesBadge">USD 723.142</span>
+        </div>
+        <div class="kpi-foot" id="kpiSalesSub">4,64 contenedores (ASIPAEM y FEPIAC en La Asunta) exportados a Francia (Malongo), Corea (Guapa) y Bolivia (Lata 16).</div>
+      </div>
+
+      <div class="kpi-card slate-top">
+        <div class="kpi-title">Ejecución Financiera Acumulada</div>
+        <div class="kpi-main-row">
+          <div class="kpi-num" id="kpiFinExec">$1.18M / €589K</div>
+          <span class="kpi-badge" id="kpiFinExecBadge">Corte 2025/2026</span>
+        </div>
+        <div class="kpi-foot" id="kpiFinExecSub">KOICA: USD 1.175.579 ejecutados (14,5% del total; 48,1% cuota 2025). UE: EUR 589.373 (51,1% prog. Años 1-2).</div>
+      </div>
+    </section>
+
+    <!-- FILA 1 DE GRÁFICOS: FAMILIAS/COBERTURA TERRITORIAL + HITOS FÍSICOS + INCLUSIÓN GÉNERO/JÓVENES -->
+    <section class="charts-row">
+      <!-- GRÁFICO 1: ALCANCE DE FAMILIAS Y COBERTURA POR MUNICIPIO -->
+      <div class="card-panel">
+        <div class="panel-head">
+          <div class="panel-kicker">Cobertura Territorial y Demográfica • Municipios de Los Yungas</div>
+          <div class="panel-action-title" id="titleChart1">La Asunta concentra la convergencia de ambos proyectos; Caranavi y Chulumani son atendidos por KOICA</div>
+          <div class="panel-sub" id="subChart1">Familias meta del programa vs. productores seleccionados/activos en 2025 por municipio</div>
+        </div>
+        <div class="chart-box">
+          <canvas id="chartTerritory"></canvas>
+        </div>
+        <div class="panel-footer">
+          <span id="footChart1L">KOICA: Caranavi, Chulumani y La Asunta (1.500 fam.)</span>
+          <strong id="footChart1R">UE: Exclusivo La Asunta (500 fam.)</strong>
+        </div>
+      </div>
+
+      <!-- GRÁFICO 2: AVANCE DE HITOS PRODUCTIVOS Y COMERCIALES -->
+      <div class="card-panel">
+        <div class="panel-head">
+          <div class="panel-kicker">Hitos Físicos de Transición Productiva • Avance % frente a Meta</div>
+          <div class="panel-action-title" id="titleChart2">Sobrecumplimiento en viveros (113%), cursos asociativos (100%) y organizaciones fortalecidas (100%)</div>
+          <div class="panel-sub" id="subChart2">Comparativa de cumplimiento porcentual de los principales entregables físicos al cierre de 2025</div>
+        </div>
+        <div class="chart-box">
+          <canvas id="chartMilestones"></canvas>
+        </div>
+        <div class="panel-footer">
+          <span id="footChart2L">Priorización técnica 2025: Viveros, diagnósticos de suelo y huertos</span>
+          <strong id="footChart2R">Trasplante SAF: Q1–Q2 2026</strong>
+        </div>
+      </div>
+
+      <!-- GRÁFICO 3: TRANSVERSALIZACIÓN DE GÉNERO Y JUVENTUD -->
+      <div class="card-panel">
+        <div class="panel-head">
+          <div class="panel-kicker">Enfoque Transversal • Participación de Mujeres y Jóvenes vs. Umbral Meta</div>
+          <div class="panel-action-title" id="titleChart3">Ambos proyectos superan ampliamente las metas de inclusión de mujeres y jóvenes (35% a 51%)</div>
+          <div class="panel-sub" id="subChart3">Porcentaje real alcanzado frente al umbral mínimo exigido en los marcos lógicos (20% en KOICA / 30% en UE)</div>
+        </div>
+        <div class="chart-box">
+          <canvas id="chartGender"></canvas>
+        </div>
+        <div class="panel-footer">
+          <span id="footChart3L">KOICA: 37,2% mujeres en SAF y 35,3% en gestión</span>
+          <strong id="footChart3R">UE: 48% en agroecología y 51% en gestión</strong>
+        </div>
+      </div>
+    </section>
+
+    <!-- FILA 2: ANÁLISIS DE EJECUCIÓN FÍSICO-FINANCIERA -->
+    <section class="fin-phys-row">
+      <!-- GRÁFICO 4: EJECUCIÓN FINANCIERA ANUAL Y POR TRANSFERENCIAS -->
+      <div class="card-panel">
+        <div class="panel-head">
+          <div class="panel-kicker">Desempeño Presupuestario • Asignación Programada vs. Ejecución Real</div>
+          <div class="panel-action-title" id="titleChart4">Ejecución Financiera: 48,1% de la cuota 2025 en Los Yungas (KOICA) y 51,1% del bienio en La Asunta (UE)</div>
+          <div class="panel-sub" id="subChart4">Comparación entre presupuesto programado/transferido y gasto efectivamente devengado al cierre del periodo</div>
+        </div>
+        <div class="chart-box">
+          <canvas id="chartFinancialMain"></canvas>
+        </div>
+        <div class="panel-footer">
+          <span id="footChart4L">KOICA Total UNODC: USD 8.132.000 (Ejec. Acum: USD 1.175.579)</span>
+          <strong id="footChart4R">UE Total: EUR 2.000.000 (Ejec. Acum: EUR 589.373)</strong>
+        </div>
+      </div>
+
+      <!-- GRÁFICO 5: CONTRASTE DE EJECUCIÓN FÍSICA VS FINANCIERA POR COMPONENTE/PRODUCTO -->
+      <div class="card-panel">
+        <div class="panel-head">
+          <div class="panel-kicker">Relación de Eficiencia Operativa • Avance Físico (%) vs. Ejecución Financiera (%)</div>
+          <div class="panel-action-title" id="titleChart5">El avance físico en viveros, fortalecimiento asociativo y ventas supera el ritmo de gasto financiero</div>
+          <div class="panel-sub" id="subChart5">Contraste entre % de ejecución presupuestaria y % de logro en metas físicas por componente</div>
+        </div>
+        <div class="chart-box">
+          <canvas id="chartPhysVsFin"></canvas>
+        </div>
+        <div class="panel-footer">
+          <span id="footChart5L">Mayor inversión en Producto 1.2 (Base Productiva SAF: USD 446.614)</span>
+          <strong id="footChart5R">Previsión Año 3 UE: EUR 642.553</strong>
+        </div>
+      </div>
+
+      <!-- PANEL NARRATIVO: APRECIACIÓN TÉCNICA DE LA EJECUCIÓN FÍSICO-FINANCIERA -->
+      <div class="card-panel">
+        <div class="panel-head">
+          <div class="panel-kicker">Diagnóstico Gerencial • Apreciación Físico-Financiera</div>
+          <div class="panel-action-title">Lectura Ejecutiva de la Relación Progreso Físico vs. Devengado</div>
+          <div class="panel-sub">Factores explicativos según informes oficiales a KOICA y Unión Europea</div>
+        </div>
+        <div class="exec-analysis-list" id="execAnalysisContainer">
+          <!-- Dinámico según proyecto -->
+        </div>
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- APARTADO 2: MARCO DE MONITOREO (100% INDICADORES: OBJETIVO, RESULTADO, PRODUCTO) -->
+    <!-- =================================================================== -->
+    <div class="section-banner">
+      <div>
+        <div class="sec-kicker">Apartado 2 • Estructura Completa del Marco de Monitoreo (Result Framework)</div>
+        <h2>Seguimiento al 100% de los Indicadores por Nivel de la Cadena de Resultados (Objetivo • Resultado • Producto)</h2>
+      </div>
+      <div class="sec-note">Incluye Línea Base, Meta Anual, Meta Final del Proyecto, Avance al Periodo y Medios de Verificación</div>
+    </div>
+
+    <section class="monitoring-framework-card">
+      <!-- RESUMEN CUANTITATIVO DEL MARCO DE MONITOREO -->
+      <div class="mf-summary-strip">
+        <div class="mf-stat">
+          <div class="s-lbl">Total Indicadores Mapeados</div>
+          <div class="s-val" id="statTotalInd">37 Indicadores (100%)</div>
+        </div>
+        <div class="mf-stat">
+          <div class="s-lbl">Nivel Objetivo / Impacto</div>
+          <div class="s-val" id="statObjInd">3 Indicadores</div>
+        </div>
+        <div class="mf-stat">
+          <div class="s-lbl">Nivel Resultado (Outcomes)</div>
+          <div class="s-val" id="statResInd">9 Indicadores</div>
+        </div>
+        <div class="mf-stat">
+          <div class="s-lbl">Nivel Producto (Outputs)</div>
+          <div class="s-val" id="statProdInd">25 Indicadores</div>
+        </div>
+        <div class="mf-stat">
+          <div class="s-lbl">Con Avance Activo / Logrado 2025</div>
+          <div class="s-val" id="statActiveInd">23 en Ejecución / 14 Prog. Años 3-5</div>
+        </div>
+      </div>
+
+      <!-- BARRA DE HERRAMIENTAS DE LA MATRIZ -->
+      <div class="mf-toolbar">
+        <div class="level-filters">
+          <button class="lvl-btn active" onclick="setLevelFilter('ALL', this)">Todos los Niveles (100%)</button>
+          <button class="lvl-btn" onclick="setLevelFilter('OBJETIVO', this)">Nivel Objetivo</button>
+          <button class="lvl-btn" onclick="setLevelFilter('RESULTADO', this)">Nivel Resultado (Outcome)</button>
+          <button class="lvl-btn" onclick="setLevelFilter('PRODUCTO', this)">Nivel Producto (Output)</button>
+          <button class="lvl-btn" onclick="setLevelFilter('ACHIEVED', this)">Metas Anuales Cumplidas / En Curso</button>
+        </div>
+        <div class="search-box">
+          <input type="text" id="mfSearchInput" class="search-input" placeholder="Buscar indicador, producto, línea base, avance..." oninput="renderMonitoringTable()" />
+          <button class="btn-export" onclick="exportMonitoringCSV()">Exportar Matriz CSV</button>
+        </div>
+      </div>
+
+      <!-- TABLA ESTRUCTURADA DEL MARCO DE MONITOREO -->
+      <div class="table-wrap">
+        <table class="mf-table">
+          <thead>
+            <tr>
+              <th style="width:95px;">Proyecto</th>
+              <th style="width:110px;">Nivel Cadena</th>
+              <th style="width:85px;">Código</th>
+              <th style="width:220px;">Enunciado del Objetivo / Resultado / Producto</th>
+              <th style="width:250px;">Indicador de Desempeño (100% Marco Lógico)</th>
+              <th style="width:95px;">Línea Base</th>
+              <th style="width:115px;">Meta Anual (2025)</th>
+              <th style="width:125px;">Meta Final Proyecto</th>
+              <th style="width:170px;">Avance Acumulado al Periodo</th>
+              <th style="width:135px;">% Cumplimiento</th>
+              <th style="width:115px;">Estado 2025</th>
+              <th>Observaciones Técnicas y Medios de Verificación</th>
+            </tr>
+          </thead>
+          <tbody id="mfTableBody">
+            <!-- Renderizado dinámico por JS -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <footer class="footer-bar">
+      <div>
+        <strong>FUENTES OFICIALES INTEGRADAS:</strong>
+        1) <em>Informe Anual 2025 & Anexo 2-3 Biannual Report al 31/12/2025 + PRODOC</em> — «Fortalecimiento de las economías locales y control de la expansión de cultivos excedentarios de coca en Los Yungas» (KOICA) •
+        2) <em>Segundo Informe Anual de Progreso (01/02/2025–31/01/2026) + Anexo I Descripción de la Acción</em> — «Sistemas Agroecológicos Sostenibles en el Municipio de La Asunta» (Unión Europea).
+      </div>
+      <div>UNODC Bolivia — Sistema de Monitoreo y Evaluación (MEAL)</div>
+    </footer>
+
+  </main>
+
+  <script>
+    Chart.register(ChartDataLabels);
+    Chart.defaults.font.family = "'Inter', sans-serif";
+    Chart.defaults.color = "#334155";
+
+    // =========================================================================
+    // 1. GESTIÓN DE LA RUTA DEL LOGO: "D:\UNODC\logo" -> archivo "UNODC-logo"
+    // =========================================================================
+    function tryAlternativeLogoPaths(img) {
+      const candidatePaths = [
+        "file:///D:/UNODC/logo/UNODC-logo.png",
+        "D:/UNODC/logo/UNODC-logo.jpg",
+        "file:///D:/UNODC/logo/UNODC-logo.jpg",
+        "D:/UNODC/logo/UNODC-logo.svg",
+        "D:/UNODC/logo/UNODC-logo",
+        "UNODC-logo.png",
+        "UNODC-logo-full-ES-4c 3_0126.png"
+      ];
+      const step = parseInt(img.dataset.step || "0", 10);
+      if (step < candidatePaths.length) {
+        img.dataset.step = step + 1;
+        img.src = candidatePaths[step];
+        return;
+      }
+      // Respaldo SVG oficial de Naciones Unidas - Oficina contra la Droga y el Delito si el navegador bloquea rutas locales D:\
+      const svgFallback = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 120" width="255" height="56">
+        <rect width="540" height="120" fill="#ffffff"/>
+        <g transform="translate(58,60)">
+          <circle cx="0" cy="0" r="38" fill="none" stroke="#009EDB" stroke-width="3"/>
+          <circle cx="0" cy="0" r="27" fill="none" stroke="#009EDB" stroke-width="2"/>
+          <circle cx="0" cy="0" r="16" fill="none" stroke="#009EDB" stroke-width="2"/>
+          <circle cx="0" cy="0" r="6" fill="#009EDB"/>
+          <line x1="-38" y1="0" x2="38" y2="0" stroke="#009EDB" stroke-width="1.8"/>
+          <line x1="0" y1="-38" x2="0" y2="38" stroke="#009EDB" stroke-width="1.8"/>
+          <line x1="-27" y1="-27" x2="27" y2="27" stroke="#009EDB" stroke-width="1.4"/>
+          <line x1="-27" y1="27" x2="27" y2="-27" stroke="#009EDB" stroke-width="1.4"/>
+          <path d="M-44,10 C-52,-15 -36,-42 -12,-48" fill="none" stroke="#009EDB" stroke-width="4.5" stroke-linecap="round"/>
+          <path d="M44,10 C52,-15 36,-42 12,-48" fill="none" stroke="#009EDB" stroke-width="4.5" stroke-linecap="round"/>
+          <path d="M-38,26 C-22,45 22,45 38,26" fill="none" stroke="#009EDB" stroke-width="4" stroke-linecap="round"/>
+        </g>
+        <text x="120" y="42" font-family="Inter, Arial, sans-serif" font-size="28" font-weight="800" fill="#0B2545">Naciones Unidas</text>
+        <text x="120" y="73" font-family="Inter, Arial, sans-serif" font-size="25" font-weight="500" fill="#0F172A">Oficina contra</text>
+        <text x="120" y="103" font-family="Inter, Arial, sans-serif" font-size="25" font-weight="500" fill="#0F172A">la Droga y el Delito</text>
+      </svg>`;
+      img.src = "data:image/svg+xml;utf8," + encodeURIComponent(svgFallback);
+    }
+
+    function handleManualLogo(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        document.getElementById('unodcLogo').src = e.target.result;
+        document.getElementById('logoPathLabel').textContent = "D:\\UNODC\\logo\\" + file.name;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    // =========================================================================
+    // 2. BASE DE DATOS ÍNTEGRA DEL MARCO DE MONITOREO (37 INDICADORES: 21 KOICA + 16 UE)
+    // =========================================================================
+    const monitoringData = [
+      // -----------------------------------------------------------------------
+      // PROYECTO 1: FORTALECIMIENTO DE LAS ECONOMÍAS LOCALES Y COMERCIALIZACIÓN DE CAFÉ EN SAF EN LOS YUNGAS (KOICA) - 21 INDICADORES
+      // -----------------------------------------------------------------------
+      {
+        proj: 'KOICA',
+        projName: 'Fortalecimiento de las economías locales y comercialización de café en SAF en Los Yungas (KOICA)',
+        level: 'OBJETIVO',
+        code: 'OBJ 1.4',
+        statement: 'Objetivo / Programa País 1.4: Generar alternativas a la expansión de cultivos excedentarios de coca y fortalecer las economías locales en tres municipios de Los Yungas de La Paz mediante sistemas agroforestales.',
+        indicator: 'N° de unidades productivas familiares (desagregadas por género y edad) que aumentan su capacidad de producir, generar excedentes comercializables y acceder a mercados (EDISC 2021-2025)',
+        baseline: '0 (2024)',
+        annualTarget: '300 familias (2025)',
+        finalTarget: '1.500 familias (≥30% mujeres; ≥30% jóvenes)',
+        actualText: '223 familias seleccionadas (66 mujeres = 29,6%; 157 hombres) + 39 en 2da convocatoria',
+        pctVsAnnual: 74.3,
+        pctVsFinal: 14.9,
+        status: 'En Curso (74% meta anual)',
+        statusClass: 'st-progress',
+        remarks: 'Caranavi: 89 fam. | La Asunta: 79 fam. | Chulumani: 55 fam. Actas de la Comisión de Selección de Beneficiarios y mapas georreferenciados (204,4 ha verificadas).'
+      },
+      {
+        proj: 'KOICA',
+        projName: 'Fortalecimiento de las economías locales y comercialización de café en SAF en Los Yungas (KOICA)',
+        level: 'RESULTADO',
+        code: 'IND 1.1',
+        statement: 'Resultado 1: Capacidad productiva de los agricultores de cultivos alternativos, principalmente café, mejorada a través de sistemas agroforestales sostenibles y promoción de su seguridad alimentaria.',
+        indicator: '% de incremento del rendimiento de la producción de café por hectárea/cato',
+        baseline: 'En levantamiento (2026)',
+        annualTarget: 'Programado Año 3 (5% en 2026)',
+        finalTarget: '20% de incremento (Año 5)',
+        actualText: 'En diagnóstico (54 parcelas en producción / 32,16 ha evaluadas)',
+        pctVsAnnual: 0,
+        pctVsFinal: 0,
+        status: 'Programado Año 3',
+        statusClass: 'st-scheduled',
+        remarks: 'Meta prevista a partir del Año 3 (2026: 5%, 2027: 15%, 2028: 20%). En 2025 se diagnosticaron 33 parcelas (23 ha) para diseño SAF y 21 parcelas (11,41 ha) en manejo de cultivo.'
+      },
+      {
+        proj: 'KOICA',
+        projName: 'Fortalecimiento de las economías locales y comercialización de café en SAF en Los Yungas (KOICA)',
+        level: 'RESULTADO',
+        code: 'IND 1.2',
+        statement: 'Resultado 1: Capacidad productiva de los agricultores de cultivos alternativos, principalmente café, mejorada a través de sistemas agroforestales sostenibles y promoción de su seguridad alimentaria.',
+        indicator: '% de los beneficiarios que implementan huertos hortícolas y otros productos para la seguridad alimentaria',
+        baseline: '0% (2024)',
+        annualTarget: '70% de seleccionados',
+        finalTarget: '70% de familias (700 huertos)',
+        actualText: '27,4% implementados (61 de 223 familias: 22 mujeres y 39 hombres)',
+        pctVsAnnual: 39.1,
+        pctVsFinal: 39.1,
+        status: 'Avance Parcial (39,1%)',
+        statusClass: 'st-progress',
+        remarks: '130 familias recibieron semillas de 8 hortalizas (72 Caranavi, 40 La Asunta, 18 Chulumani) y 102 fueron capacitadas; 61 ya cuentan con huerto instalado en campo (16 Caranavi, 18 Chulumani, 27 La Asunta).'
+      },
+      {
+        proj: 'KOICA',
+        projName: 'Fortalecimiento de las economías locales y comercialización de café en SAF en Los Yungas (KOICA)',
+        level: 'PRODUCTO',
+        code: 'IND 1.1.1',
+        statement: 'Producto 1.1: Habilidades y técnicas agrícolas de los agricultores fortalecidas para implementar sistemas agroforestales para cultivos alternativos.',
+        indicator: 'N° de personas capacitadas en sistemas agroforestales (SAF) con base productiva de café',
+        baseline: '0 (2024)',
+        annualTarget: '900 personas (Año 2)',
+        finalTarget: '1.500 personas capacitadas',
+        actualText: '117 productores capacitados en Módulo 1/3 (78 hombres y 39 mujeres)',
+        pctVsAnnual: 13.0,
+        pctVsFinal: 7.8,
+        status: 'En Curso (Módulo 1/3)',
+        statusClass: 'st-progress',
+        remarks: 'El reporte oficial registra 0% en ciclo completo porque los Módulos 2 y 3 concluyen en junio 2026 según calendario agrícola. En Módulo 1 participaron 44 en Caranavi, 40 en Chulumani y 33 en La Asunta (95% aprobó evaluación).'
+      },
+      {
+        proj: 'KOICA',
+        projName: 'Fortalecimiento de las economías locales y comercialización de café en SAF en Los Yungas (KOICA)',
+        level: 'PRODUCTO',
+        code: 'IND 1.1.2',
+        statement: 'Producto 1.1: Habilidades y técnicas agrícolas de los agricultores fortalecidas para implementar sistemas agroforestales para cultivos alternativos.',
+        indicator: 'N° de personas capacitadas en producción, post-cosecha y procesamiento de café',
+        baseline: '0 (2024)',
+        annualTarget: '900 personas (Año 2)',
+        finalTarget: '1.500 personas capacitadas',
+        actualText: '131 productores capacitados en Módulo 2/6 y 66 en Módulo 1/6',
+        pctVsAnnual: 14.6,
+        pctVsFinal: 8.7,
+        status: 'En Curso (Módulo 2/6)',
+        statusClass: 'st-progress',
+        remarks: 'Se priorizó el Módulo 2 (Producción de plantines y manejo de viveros) para acompañar la siembra de almácigos: 58 en Caranavi, 40 en Chulumani y 33 en La Asunta (83 hombres y 48 mujeres).'
+      },
+      {
+        proj: 'KOICA',
+        projName: 'Fortalecimiento de las economías locales y comercialización de café en SAF en Los Yungas (KOICA)',
+        level: 'PRODUCTO',
+        code: 'IND 1.1.3',
+        statement: 'Producto 1.1: Habilidades y técnicas agrícolas de los agricultores fortalecidas para implementar sistemas agroforestales para cultivos alternativos.',
+        indicator: '% de las personas capacitadas que son mujeres (Capacitaciones técnicas del Resultado 1)',
+        baseline: '0% (2024)',
+        annualTarget: '20% mujeres',
+        finalTarget: '20% mujeres',
+        actualText: '37,2% mujeres (61 mujeres de 164 productores únicos capacitados)',
+        pctVsAnnual: 186.0,
+        pctVsFinal: 186.0,
+        status: 'Superado (186% de meta)',
+        statusClass: 'st-achieved',
+        remarks: 'Participación sin duplicación en los 3 municipios: Caranavi (29 mujeres de 73), Chulumani (21 de 54) y La Asunta (11 de 37). Supera en +17,2 puntos el umbral del 20%.'
+      },
+      {
+        proj: 'KOICA',
+        projName: 'Fortalecimiento de las economías locales y comercialización de café en SAF en Los Yungas (KOICA)',
+        level: 'PRODUCTO',
+        code: 'IND 1.1.4',
+        statement: 'Producto 1.1: Habilidades y técnicas agrícolas de los agricultores fortalecidas para implementar sistemas agroforestales para cultivos alternativos.',
+        indicator: 'N° de técnicos y productores líderes que reciben capacitación de capacitadores (ToT)',
+        baseline: '0 (2024)',
+        annualTarget: '50 líderes/técnicos (Año 2)',
+        finalTarget: '80 personas (70 líderes + 6 mun. + 4 MDRyT)',
+        actualText: '0 (En proceso de contratación de entidad especializada)',
+        pctVsAnnual: 0,
+        pctVsFinal: 0,
+        status: 'Reprogramado 2026',
+        statusClass: 'st-scheduled',
+        remarks: 'TDR elaborados y proceso licitatorio en marcha para formar a 60 líderes y técnicos en la gestión 2026 bajo modalidad de Escuelas de Campo.'
+      },
+      {
+        proj: 'KOICA',
+        projName: 'Fortalecimiento de las economías locales y comercialización de café en SAF en Los Yungas (KOICA)',
+        level: 'PRODUCTO',
+        code: 'IND 1.2.1',
+        statement: 'Producto 1.2: Base productiva agrícola establecida para implementar sistemas agroforestales sostenibles.',
+        indicator: 'N° de viveros agroforestales comunitarios y familiares (plantaciones de café y forestales) implementados',
+        baseline: '0 (2024)',
+        annualTarget: '23 viveros (Año 2)',
+        finalTarget: '39 viveros implementados',
+        actualText: '26 sitios de almácigo/viveros implementados en 15 comunidades (113,04% meta anual)',
+        pctVsAnnual: 113.0,
+        pctVsFinal: 66.7,
+        status: 'Meta Anual Lograda (113%)',
+        statusClass: 'st-achieved',
+        remarks: '389,7 kg de semilla sembrada (Catuai: 111,1 kg, Castillo: 173,6 kg, Pacamara: 42 kg, Java: 36,1 kg, Geisha: 27 kg): 14 sitios en La Asunta, 9 en Caranavi y 3 en Chulumani.'
+      },
+      {
+        proj: 'KOICA',
+        projName: 'Fortalecimiento de las economías locales y comercialización de café en SAF en Los Yungas (KOICA)',
+        level: 'PRODUCTO',
+        code: 'IND 1.2.2',
+        statement: 'Producto 1.2: Base productiva agrícola establecida para implementar sistemas agroforestales sostenibles.',
+        indicator: 'Hectáreas de plantaciones de café implementadas bajo sistemas agroforestales (SAF)',
+        baseline: '0 ha (2024)',
+        annualTarget: '400 ha (250 ha campaña 25-26)',
+        finalTarget: '888 hectáreas SAF',
+        actualText: '204,4 ha comprometidas y verificadas con plantines en vivero (0 ha trasplantadas en 2025)',
+        pctVsAnnual: 0,
+        pctVsFinal: 0,
+        status: 'En Vivero para Trasplante',
+        statusClass: 'st-progress',
+        remarks: 'El trasplante a campo definitivo se realiza en Q1-Q2 2026 una vez que los plantines de los 26 viveros cumplan su ciclo de desarrollo y concluyan los análisis de suelo.'
+      },
+      {
+        proj: 'KOICA',
+        projName: 'Fortalecimiento de las economías locales y comercialización de café en SAF en Los Yungas (KOICA)',
+        level: 'PRODUCTO',
+        code: 'IND 1.2.3',
+        statement: 'Producto 1.2: Base productiva agrícola establecida para implementar sistemas agroforestales sostenibles.',
+        indicator: 'Centro piloto de producción de biofertilizantes implementado',
+        baseline: '0 (2024)',
+        annualTarget: 'Programado Año 3 (1 en 2026)',
+        finalTarget: '1 centro piloto operativo',
+        actualText: '0 (Estudio de prefactibilidad en 2026; captura de microorganismos EM en Chulumani)',
+        pctVsAnnual: 0,
+        pctVsFinal: 0,
+        status: 'Programado Año 3',
+        statusClass: 'st-scheduled',
+        remarks: 'Se ejecutaron USD 4.750,34 en acciones preparatorias de bioinsumos y captura de microorganismos eficientes de montaña en 3 comunidades de Chulumani.'
+      },
+      {
+        proj: 'KOICA',
+        projName: 'Fortalecimiento de las economías locales y comercialización de café en SAF en Los Yungas (KOICA)',
+        level: 'PRODUCTO',
+        code: 'IND 1.3.1',
+        statement: 'Producto 1.3: Instalaciones de procesamiento de productos agroforestales establecidas.',
+        indicator: 'N° de secadores de café familiares implementados',
+        baseline: '0 (2024)',
+        annualTarget: '300 secadores (Año 2)',
+        finalTarget: '1.000 secadores familiares',
+        actualText: '0 construidos (54 productores con 32,16 ha en producción identificados para 1ra fase 2026)',
+        pctVsAnnual: 0,
+        pctVsFinal: 0,
+        status: 'Reprogramado 2026',
+        statusClass: 'st-scheduled',
+        remarks: 'Por prudencia técnica y financiera, la instalación se inicia en 2026 con los 54 caficultores que ya cuentan con parcelas en producción diagnosticadas.'
+      },
+      {
+        proj: 'KOICA',
+        projName: 'Fortalecimiento de las economías locales y comercialización de café en SAF en Los Yungas (KOICA)',
+        level: 'PRODUCTO',
+        code: 'IND 1.3.2',
+        statement: 'Producto 1.3: Instalaciones de procesamiento de productos agroforestales establecidas.',
+        indicator: 'N° de plantas de beneficio húmedo (acopio guinda, despulpado, lavado, fermentado), con secadores y centros de acopio',
+        baseline: '0 (2024)',
+        annualTarget: '2 plantas (Año 2)',
+        finalTarget: '3 plantas de beneficio húmedo',
+        actualText: '0 construidas (Estudio de factibilidad y dimensionamiento reprogramado para 2026)',
+        pctVsAnnual: 0,
+        pctVsFinal: 0,
+        status: 'Reprogramado 2026',
+        statusClass: 'st-scheduled',
+        remarks: 'Requiere confirmación de volúmenes productivos y personería jurídica de las asociaciones en cada municipio antes de edificar la infraestructura.'
+      },
+      {
+        proj: 'KOICA',
+        projName: 'Fortalecimiento de las economías locales y comercialización de café en SAF en Los Yungas (KOICA)',
+        level: 'RESULTADO',
+        code: 'IND 2.1',
+        statement: 'Resultado 2: Economías locales mejoradas a través de los negocios comunitarios y el fortalecimiento de la cadena de valor del café.',
+        indicator: '% de incremento de los ingresos de los productores por la comercialización de café',
+        baseline: 'En levantamiento (2026)',
+        annualTarget: 'Programado Año 3 (5% en 2026)',
+        finalTarget: '20% de incremento (Año 5)',
+        actualText: '0% (Programado a partir del Año 3 tras levantamiento de Línea Base 2026)',
+        pctVsAnnual: 0,
+        pctVsFinal: 0,
+        status: 'Programado Año 3',
+        statusClass: 'st-scheduled',
+        remarks: 'En proceso de contratación de la consultoría de Estudio de Línea Base del proyecto para establecer el parámetro inicial de ingresos familiares.'
+      },
+      {
+        proj: 'KOICA',
+        projName: 'Fortalecimiento de las economías locales y comercialización de café en SAF en Los Yungas (KOICA)',
+        level: 'RESULTADO',
+        code: 'IND 2.2',
+        statement: 'Resultado 2: Economías locales mejoradas a través de los negocios comunitarios y el fortalecimiento de la cadena de valor del café.',
+        indicator: 'N° de toneladas de café comercializadas por las organizaciones apoyadas',
+        baseline: '0 Tn (2024)',
+        annualTarget: '19 Tn (Meta 2025) / 58 Tn (Año 2)',
+        finalTarget: '345 Toneladas comercializadas',
+        actualText: '0 Tn registradas (Articulación comercial en SCA Houston, EXPOCRUZ, CAMEX y preacuerdo Guapa Coffee)',
+        pctVsAnnual: 0,
+        pctVsFinal: 0,
+        status: 'En Articulación Comercial',
+        statusClass: 'st-progress',
+        remarks: 'Se generaron intenciones de compra con Lata 16, AGORA, Ally Coffee, Café Paraíso, Royal Coffee y Guapa Coffee SRL (exportación a Corea prevista para 2026).'
+      },
+      {
+        proj: 'KOICA',
+        projName: 'Fortalecimiento de las economías locales y comercialización de café en SAF en Los Yungas (KOICA)',
+        level: 'PRODUCTO',
+        code: 'IND 2.1.1',
+        statement: 'Producto 2.1: Organizaciones de productores constituidas para asegurar las ganancias de los productores en los mercados.',
+        indicator: 'N° de organizaciones de productores de café de primer nivel creadas y/o fortalecidas',
+        baseline: '0 (2024)',
+        annualTarget: '3 asociaciones (Año 2)',
+        finalTarget: '3 asociaciones de 1er nivel',
+        actualText: '1 asociación constituida en trámite de personería jurídica en Caranavi (AIPAV Villamontes)',
+        pctVsAnnual: 33.3,
+        pctVsFinal: 33.3,
+        status: 'En Curso (1 de 3 = 33,3%)',
+        statusClass: 'st-progress',
+        remarks: 'AIPAV (Caranavi) ya cuenta con acta constitutiva, estatutos, reglamento interno y directiva posesionada. En Chulumani y La Asunta se licita el servicio legal en 2026.'
+      },
+      {
+        proj: 'KOICA',
+        projName: 'Fortalecimiento de las economías locales y comercialización de café en SAF en Los Yungas (KOICA)',
+        level: 'PRODUCTO',
+        code: 'IND 2.1.2',
+        statement: 'Producto 2.1: Organizaciones de productores constituidas para asegurar las ganancias de los productores en los mercados.',
+        indicator: 'Federación de caficultores de segundo nivel creada y/o fortalecida',
+        baseline: '0 (2024)',
+        annualTarget: 'Programado Año 3 (1 en 2026)',
+        finalTarget: '1 federación de 2do nivel',
+        actualText: '0 (Programado para Año 3; asistencia inicial al Comité de Mujeres de FECAFEB)',
+        pctVsAnnual: 0,
+        pctVsFinal: 0,
+        status: 'Programado Año 3',
+        statusClass: 'st-scheduled',
+        remarks: 'Se brindó asistencia técnica al Comité de Mujeres de FECAFEB y a la Dirección de Género del GAM Caranavi para la política municipal del cuidado.'
+      },
+      {
+        proj: 'KOICA',
+        projName: 'Fortalecimiento de las economías locales y comercialización de café en SAF en Los Yungas (KOICA)',
+        level: 'PRODUCTO',
+        code: 'IND 2.2.1',
+        statement: 'Producto 2.2: Capacidades empresariales de las asociaciones de productores mejoradas.',
+        indicator: 'N° de planes estratégicos (uno por asociación) desarrollados para la sostenibilidad de las asociaciones',
+        baseline: '0 (2024)',
+        annualTarget: 'Programado Año 3 (3 en 2026)',
+        finalTarget: '3 planes estratégicos',
+        actualText: '0 (Programado a partir del Año 3 una vez formalizadas las 3 asociaciones)',
+        pctVsAnnual: 0,
+        pctVsFinal: 0,
+        status: 'Programado Año 3',
+        statusClass: 'st-scheduled',
+        remarks: 'En 2025 se avanzó con el Plan de Desarrollo de Capacidades ( FODA, Matriz McKinsey y Modelo CANVAS) con AIPAV.'
+      },
+      {
+        proj: 'KOICA',
+        projName: 'Fortalecimiento de las economías locales y comercialización de café en SAF en Los Yungas (KOICA)',
+        level: 'PRODUCTO',
+        code: 'IND 2.2.2',
+        statement: 'Producto 2.2: Capacidades empresariales de las asociaciones de productores mejoradas.',
+        indicator: 'N° de cursos de capacitación desarrollados para fortalecer a las asociaciones de productores',
+        baseline: '0 (2024)',
+        annualTarget: '10 cursos (Año 2)',
+        finalTarget: '30 cursos desarrollados',
+        actualText: '10 cursos desarrollados e impartidos (100% de la meta anual 2025; 33,3% de la meta final)',
+        pctVsAnnual: 100.0,
+        pctVsFinal: 33.3,
+        status: 'Meta Anual Lograda (100%)',
+        statusClass: 'st-achieved',
+        remarks: '10 módulos ejecutados: personería jurídica, estatutos, plan de capacidades, estructura organizativa, POA, grupos de trabajo, contabilidad básica, modelo CANVAS e igualdad de género/economía del cuidado.'
+      },
+      {
+        proj: 'KOICA',
+        projName: 'Fortalecimiento de las economías locales y comercialización de café en SAF en Los Yungas (KOICA)',
+        level: 'PRODUCTO',
+        code: 'IND 2.2.3',
+        statement: 'Producto 2.2: Capacidades empresariales de las asociaciones de productores mejoradas.',
+        indicator: '% de las personas capacitadas en fortalecimiento organizacional y empresarial que son mujeres',
+        baseline: '0% (2024)',
+        annualTarget: '20% mujeres',
+        finalTarget: '20% mujeres',
+        actualText: '35,3% mujeres (18 mujeres y 33 hombres de 51 participantes — 176,5% de cumplimiento)',
+        pctVsAnnual: 176.5,
+        pctVsFinal: 176.5,
+        status: 'Superado (176,5% de meta)',
+        statusClass: 'st-achieved',
+        remarks: 'Caranavi: 12 mujeres y 21 hombres (33 total); Chulumani: 6 mujeres y 12 hombres (18 total). Supera ampliamente el mínimo del 20%.'
+      },
+      {
+        proj: 'KOICA',
+        projName: 'Fortalecimiento de las economías locales y comercialización de café en SAF en Los Yungas (KOICA)',
+        level: 'PRODUCTO',
+        code: 'IND 2.3.1',
+        statement: 'Producto 2.3: Cadena de valor del cultivo de café fortalecida.',
+        indicator: 'Obtención de certificación Fairtrade (Comercio Justo) para las asociaciones y federación de productores',
+        baseline: 'No (2024)',
+        annualTarget: 'Programado Año 3 (Sí en 2026)',
+        finalTarget: 'Sí (Certificación Fairtrade)',
+        actualText: 'En preparación (3 reuniones de la Submesa de Trazabilidad y Geolocalización EUDR)',
+        pctVsAnnual: 0,
+        pctVsFinal: 0,
+        status: 'Programado Año 3',
+        statusClass: 'st-scheduled',
+        remarks: 'Se diseñó la malla curricular de 4 módulos (control de calidad en viveros, certificación orgánica, Fairtrade y trazabilidad) y se articuló con Fairtrade International en la SCA Expo.'
+      },
+      {
+        proj: 'KOICA',
+        projName: 'Fortalecimiento de las economías locales y comercialización de café en SAF en Los Yungas (KOICA)',
+        level: 'PRODUCTO',
+        code: 'IND 2.3.2',
+        statement: 'Producto 2.3: Cadena de valor del cultivo de café fortalecida.',
+        indicator: 'Proceso de transición 3 concluido para obtener la certificación orgánica para las organizaciones de productores',
+        baseline: 'No (2024)',
+        annualTarget: 'Programado Año 5 (Sí en 2028)',
+        finalTarget: 'Sí (Certificación Orgánica)',
+        actualText: 'En preparación (Reuniones técnicas con IMOCERT, MAYACERT y BIOLATINA para multisellos)',
+        pctVsAnnual: 0,
+        pctVsFinal: 0,
+        status: 'Programado Año 5',
+        statusClass: 'st-scheduled',
+        remarks: 'Estrategia comercial orientada a obtener certificaciones múltiples (NOP, EUDR y mercado coreano) mediante una sola inspección de auditoría.'
+      },
+
+      // -----------------------------------------------------------------------
+      // PROYECTO 2: SISTEMAS AGROECOLÓGICOS SOSTENIBLES EN EL MUNICIPIO DE LA ASUNTA (UNIÓN EUROPEA) - 16 INDICADORES
+      // -----------------------------------------------------------------------
+      {
+        proj: 'EU',
+        projName: 'Sistemas Agroecológicos Sostenibles en el Municipio de La Asunta (Unión Europea)',
+        level: 'OBJETIVO',
+        code: 'OBJ 1',
+        statement: 'Objetivo del Proyecto: Apoyo a la transición hacia sistemas agroecológicos sostenibles y resilientes al cambio climático en Bolivia, con acceso a mercados, mediante alianzas público-privadas (EDISC 2021-2025).',
+        indicator: 'N° de unidades productivas familiares (desagregadas por sexo y edad) que aumentan su capacidad de producir, generar excedentes comercializables y acceder a mercados (Alcance global: 500 familias)',
+        baseline: '250 UPF (2023)',
+        annualTarget: 'En progresión (Año 2)',
+        finalTarget: '450 UPF (2027) / Alcance: 500 fam.',
+        actualText: '332 productores activos (202 en programa orgánico FEPIAC + 130 nuevos seleccionados en 11 com. y 2 org.)',
+        pctVsAnnual: 73.8,
+        pctVsFinal: 73.8,
+        status: 'En Progresión (332 / 450)',
+        statusClass: 'st-progress',
+        remarks: 'El proyecto alcanza a 500 familias entre productores de continuidad (BOLW70: 202 en 35 comunidades de las Federaciones Chamaca y La Asunta) y 130 nuevos productores aprobados por el CGI en 2025.'
+      },
+      {
+        proj: 'EU',
+        projName: 'Sistemas Agroecológicos Sostenibles en el Municipio de La Asunta (Unión Europea)',
+        level: 'OBJETIVO',
+        code: 'OBJ 2',
+        statement: 'Objetivo del Proyecto: Apoyo a la transición hacia sistemas agroecológicos sostenibles y resilientes al cambio climático en Bolivia, con acceso a mercados, mediante alianzas público-privadas (EDISC 2021-2025).',
+        indicator: 'Superficie total de cultivo de hoja de coca en zonas seleccionadas del Municipio de La Asunta',
+        baseline: 'TBD (2023)',
+        annualTarget: 'Monitoreo anual',
+        finalTarget: 'TBD (Control de no expansión al 2027)',
+        actualText: '130 predios evaluados con compromiso de no ampliación de coca excedentaria',
+        pctVsAnnual: 50.0,
+        pctVsFinal: 50.0,
+        status: 'Monitoreo Activo',
+        statusClass: 'st-scheduled',
+        remarks: 'Verificación mediante imágenes satelitales, drones y formularios digitales de los criterios de selección aprobados por el CGI el 15/04/2025.'
+      },
+      {
+        proj: 'EU',
+        projName: 'Sistemas Agroecológicos Sostenibles en el Municipio de La Asunta (Unión Europea)',
+        level: 'RESULTADO',
+        code: 'RES 1.1',
+        statement: 'Resultado 1: Capacidad productiva mejorada a través de sistemas de producción agroecológicos sostenibles y resilientes al cambio climático.',
+        indicator: 'N° de pequeños agricultores que aplican técnicas/soluciones agroecológicas en relación con una cadena de valor alternativa específica',
+        baseline: '250 agricultores (2023)',
+        annualTarget: 'Reprogramado Año 3',
+        finalTarget: '450 agricultores (2027)',
+        actualText: '377 en aplicación inicial (250 LB + 127 nuevos productores con huertos agroecológicos y 115 con viveros)',
+        pctVsAnnual: 63.5,
+        pctVsFinal: 83.8,
+        status: 'En Curso (Medición Año 3)',
+        statusClass: 'st-progress',
+        remarks: 'Formalmente reprogramado para evaluación en parcela en el Año 3 (2026) tras el trasplante de las 84,16 ha de café; ya se tienen 127 familias aplicando agroecología en huertos y 50 análisis de suelo.'
+      },
+      {
+        proj: 'EU',
+        projName: 'Sistemas Agroecológicos Sostenibles en el Municipio de La Asunta (Unión Europea)',
+        level: 'RESULTADO',
+        code: 'RES 1.2',
+        statement: 'Resultado 1: Capacidad productiva mejorada a través de sistemas de producción agroecológicos sostenibles y resilientes al cambio climático.',
+        indicator: 'N° de micro, pequeñas y medianas empresas / organizaciones que aplican prácticas de consumo y producción sostenibles con apoyo de la UE (GERF 2.6)',
+        baseline: '0 (2023)',
+        annualTarget: 'Reprogramado Año 3',
+        finalTarget: '4 organizaciones/MiPyMEs (2027)',
+        actualText: '2 organizaciones certificadas/auditadas en estándares sostenibles (ASIPAEM Fairtrade y FEPIAC Orgánico)',
+        pctVsAnnual: 50.0,
+        pctVsFinal: 50.0,
+        status: 'En Curso (2 de 4 = 50%)',
+        statusClass: 'st-progress',
+        remarks: 'ASIPAEM aprobó auditoría FLOCERT (116 socios) y FEPIAC cuenta con 202 socios inspeccionados por IMOCERT (68 Ecológicos, 91 C2, 28 C1, 15 C0). Consolidación formal en Año 3.'
+      },
+      {
+        proj: 'EU',
+        projName: 'Sistemas Agroecológicos Sostenibles en el Municipio de La Asunta (Unión Europea)',
+        level: 'PRODUCTO',
+        code: 'PROD 1.1',
+        statement: 'Producto 1: Sistemas agroecológicos sostenibles y resilientes al cambio climático del cultivo de café y otros productos viables como alternativas a la hoja de coca implementados.',
+        indicator: 'N° de pequeños productores capacitados en sistemas agroecológicos, desagregados por sexo y edad',
+        baseline: '250 productores (2023)',
+        annualTarget: '138 nuevos en 2025',
+        finalTarget: '550 productores (2027) [+300 nuevos]',
+        actualText: '388 acumulados (250 LB + 138 nuevos capacitados en 2025: 72 hombres adultos, 51 mujeres y 15 jóvenes)',
+        pctVsAnnual: 100.0,
+        pctVsFinal: 70.5,
+        status: 'Avance Sólido (70,5% total)',
+        statusClass: 'st-achieved',
+        remarks: '138 nuevos productores capacitados sin duplicación en 4 módulos agroecológicos (Suelos: 22; Producción de plantas: 89; Cosecha y beneficio: 31; Caficultura orgánica/Seguridad alimentaria: 90).'
+      },
+      {
+        proj: 'EU',
+        projName: 'Sistemas Agroecológicos Sostenibles en el Municipio de La Asunta (Unión Europea)',
+        level: 'PRODUCTO',
+        code: 'PROD 1.2',
+        statement: 'Producto 1: Sistemas agroecológicos sostenibles y resilientes al cambio climático del cultivo de café y otros productos viables como alternativas a la hoja de coca implementados.',
+        indicator: 'N° de hectáreas con cultivos diversificados en sistemas agroecológicos',
+        baseline: '0 ha nuevas (2023)',
+        annualTarget: '84,16 ha en vivero (2025)',
+        finalTarget: '200 hectáreas (2027)',
+        actualText: '84,16 hectáreas en fase de establecimiento con 115 viveros familiares y comunales activos',
+        pctVsAnnual: 100.0,
+        pctVsFinal: 42.1,
+        status: 'En Vivero (84,16 / 200 ha)',
+        statusClass: 'st-progress',
+        remarks: '182,5 kg de semilla distribuida en 11 comunidades de La Asunta (Castillo, Java, Pacamara y Geisha). Incluye 127 huertos hortícolas familiares con 9 variedades implementados.'
+      },
+      {
+        proj: 'EU',
+        projName: 'Sistemas Agroecológicos Sostenibles en el Municipio de La Asunta (Unión Europea)',
+        level: 'PRODUCTO',
+        code: 'PROD 1.3',
+        statement: 'Producto 1: Sistemas agroecológicos sostenibles y resilientes al cambio climático del cultivo de café y otros productos viables como alternativas a la hoja de coca implementados.',
+        indicator: 'Porcentaje de participación de mujeres y jóvenes en los procesos de capacitación agroecológica',
+        baseline: 'TBD (2023)',
+        annualTarget: '30% mujeres y jóvenes',
+        finalTarget: '30% mujeres y jóvenes (2027)',
+        actualText: '48,0% de participación lograda (66 mujeres y jóvenes de 138 capacitados: 51 mujeres + 15 jóvenes)',
+        pctVsAnnual: 160.0,
+        pctVsFinal: 160.0,
+        status: 'Superado (160% de meta)',
+        statusClass: 'st-achieved',
+        remarks: 'Supera en +18 puntos porcentuales la meta del 30% establecida en el Marco Lógico, impulsando el relevo generacional y la equidad de género en La Asunta.'
+      },
+      {
+        proj: 'EU',
+        projName: 'Sistemas Agroecológicos Sostenibles en el Municipio de La Asunta (Unión Europea)',
+        level: 'RESULTADO',
+        code: 'RES 2.1',
+        statement: 'Resultado 2: Organizaciones de productores y productoras fortalecidas con acceso a mercados estables, justos y rentables mediante alianzas público-privadas nacionales e internacionales.',
+        indicator: 'Aumento del valor monetario de los productos prioritarios comercializados en la zona de intervención mediante un enfoque reforzado de cadena de valor',
+        baseline: 'USD 270.000 (2023)',
+        annualTarget: 'Reprogramado Año 4',
+        finalTarget: '30% de incremento (2027)',
+        actualText: 'USD 723.142 generados en ventas en 2025 (+167,8% respecto al valor de línea base 2023)',
+        pctVsAnnual: 100.0,
+        pctVsFinal: 100.0,
+        status: 'En Curso (Ventas: $723.142)',
+        statusClass: 'st-achieved',
+        remarks: 'Aunque la evaluación de impacto del indicador está programada para el Año 4, las ventas de ASIPAEM ($398.526) y FEPIAC + especialidad ($324.615) ya triplican la referencia inicial.'
+      },
+      {
+        proj: 'EU',
+        projName: 'Sistemas Agroecológicos Sostenibles en el Municipio de La Asunta (Unión Europea)',
+        level: 'RESULTADO',
+        code: 'RES 2.2',
+        statement: 'Resultado 2: Organizaciones de productores y productoras fortalecidas con acceso a mercados estables, justos y rentables mediante alianzas público-privadas nacionales e internacionales.',
+        indicator: 'N° de asociaciones responsables (alianzas comerciales) desarrolladas con entidades locales y/o internacionales del sector privado',
+        baseline: '0 nuevas (2023)',
+        annualTarget: 'Reprogramado Año 3',
+        finalTarget: '4 alianzas privadas (2027)',
+        actualText: '3 articulaciones comerciales activas con contratos (Malongo Francia, Guapa Coffee Corea, Lata 16 Bolivia)',
+        pctVsAnnual: 75.0,
+        pctVsFinal: 75.0,
+        status: 'En Consolidación (3 de 4)',
+        statusClass: 'st-progress',
+        remarks: 'Contratos ejecutados en 2025 con Malongo (38,4 Tn), Guapa Coffee (9,6 Tn) y Lata 16 (38,4 Tn), más ventas de microlotes Java y Geisha (>80 pts SCA).'
+      },
+      {
+        proj: 'EU',
+        projName: 'Sistemas Agroecológicos Sostenibles en el Municipio de La Asunta (Unión Europea)',
+        level: 'PRODUCTO',
+        code: 'PROD 2.1',
+        statement: 'Producto 2: Organizaciones productoras orientadas al acceso a mercados en alianza con el sector privado nacional e internacional fortalecidas.',
+        indicator: 'Volumen de comercialización de una alternativa específica a la cadena de valor de la hoja de coca (Contenedores / Toneladas / USD)',
+        baseline: '3 cont. / 57,6 Tn / $270.000 (2023)',
+        annualTarget: '4,64 contenedores (2025)',
+        finalTarget: '10 cont. / 192 Tn / $900.000 (2027)',
+        actualText: '4,64 contenedores comercializados en 2025 (89,12 Tn café oro verde + 2,72 Tn especialidad = USD 723.142)',
+        pctVsAnnual: 100.0,
+        pctVsFinal: 46.4,
+        status: 'Meta Anual Lograda (46,4% final)',
+        statusClass: 'st-achieved',
+        remarks: 'En volumen físico alcanza el 46,4% de la meta de 10 contenedores (89,12 / 192 Tn) y en valor monetario alcanza el 80,35% de la meta de USD 900.000.'
+      },
+      {
+        proj: 'EU',
+        projName: 'Sistemas Agroecológicos Sostenibles en el Municipio de La Asunta (Unión Europea)',
+        level: 'PRODUCTO',
+        code: 'PROD 2.2',
+        statement: 'Producto 2: Organizaciones productoras orientadas al acceso a mercados en alianza con el sector privado nacional e internacional fortalecidas.',
+        indicator: 'N° de asociaciones de productores creadas y/o fortalecidas que comercializan sus productos',
+        baseline: '5 organizaciones (2023)',
+        annualTarget: '+3 organizaciones en 2025',
+        finalTarget: '8 organizaciones (2027)',
+        actualText: '8 organizaciones alcanzadas (5 LB + 2 fortalecidas [FEPIAC y ASIPAEM] + 1 nueva creada [AIPACAL Layme])',
+        pctVsAnnual: 100.0,
+        pctVsFinal: 100.0,
+        status: 'Meta Alcanzada (100%)',
+        statusClass: 'st-achieved',
+        remarks: 'FEPIAC habilitada en Padrón de Comercio Exterior (SENAVEX/Aduana/SENASAG) con Plan Estratégico; ASIPAEM auditada por FLOCERT con Plan Estratégico; AIPACAL creada con 17 socios en Layme.'
+      },
+      {
+        proj: 'EU',
+        projName: 'Sistemas Agroecológicos Sostenibles en el Municipio de La Asunta (Unión Europea)',
+        level: 'PRODUCTO',
+        code: 'PROD 2.3',
+        statement: 'Producto 2: Organizaciones productoras orientadas al acceso a mercados en alianza con el sector privado nacional e internacional fortalecidas.',
+        indicator: 'N° de emprendimientos desarrollados, liderados por mujeres y/o jóvenes',
+        baseline: '0 (2023)',
+        annualTarget: 'En proceso de equipamiento',
+        finalTarget: '2 emprendimientos (2027)',
+        actualText: 'En proceso de adquisición de equipamiento (4 jóvenes/mujeres promovidos en ferias nacionales)',
+        pctVsAnnual: 25.0,
+        pctVsFinal: 25.0,
+        status: 'En Equipamiento (Reprog.)',
+        statusClass: 'st-progress',
+        remarks: 'Proceso de compra de equipamiento en marcha (Tabla 5 del informe) y participación de 4 jóvenes/mujeres en ferias Junt@s Emprendemos, Expocruz y Feria del Libro.'
+      },
+      {
+        proj: 'EU',
+        projName: 'Sistemas Agroecológicos Sostenibles en el Municipio de La Asunta (Unión Europea)',
+        level: 'PRODUCTO',
+        code: 'PROD 2.4',
+        statement: 'Producto 2: Organizaciones productoras orientadas al acceso a mercados en alianza con el sector privado nacional e internacional fortalecidas.',
+        indicator: 'Porcentaje de participación de mujeres y jóvenes en los procesos de capacitación organizacional y comercial',
+        baseline: 'TBD (2023)',
+        annualTarget: '30% mujeres y jóvenes',
+        finalTarget: '30% mujeres y jóvenes (2027)',
+        actualText: '51,1% de participación lograda (94 mujeres y jóvenes de 184 capacitados: 73 mujeres + 21 jóvenes)',
+        pctVsAnnual: 170.3,
+        pctVsFinal: 170.3,
+        status: 'Superado (170% de meta)',
+        statusClass: 'st-achieved',
+        remarks: 'Módulos impartidos: Importancia de la producción de café (97 part.), Fortalecimiento organizacional con enfoque de género (72 part.) y Caficultura orgánica/Comercio justo (103 part.).'
+      },
+      {
+        proj: 'EU',
+        projName: 'Sistemas Agroecológicos Sostenibles en el Municipio de La Asunta (Unión Europea)',
+        level: 'RESULTADO',
+        code: 'RES 3.1',
+        statement: 'Resultado 3: Gestión del conocimiento e iniciativas innovadoras implementadas para la sostenibilidad del Proyecto.',
+        indicator: 'N° de prácticas/sistemas de innovación aplicados en relación con una cadena de valor alternativa específica',
+        baseline: '0 (2023)',
+        annualTarget: 'Reprogramado Año 4',
+        finalTarget: '2 prácticas/sistemas (2027)',
+        actualText: 'En desarrollo (60% de avance en sistema de trazabilidad EUDR + fermentación controlada)',
+        pctVsAnnual: 30.0,
+        pctVsFinal: 30.0,
+        status: 'En Desarrollo (60% sist.)',
+        statusClass: 'st-progress',
+        remarks: 'Se capacitó a 31 productores y técnicos con experto internacional de Colombia en procesos de fermentación y catación organoléptica (10 pruebas de calidad realizadas).'
+      },
+      {
+        proj: 'EU',
+        projName: 'Sistemas Agroecológicos Sostenibles en el Municipio de La Asunta (Unión Europea)',
+        level: 'PRODUCTO',
+        code: 'PROD 3.1',
+        statement: 'Producto 3: Gestión del conocimiento y procesos de innovación desarrollados para asegurar la sostenibilidad de los sistemas agroecológicos y de acceso al mercado.',
+        indicator: 'N° de técnicos y productores que participan en intercambios de experiencias',
+        baseline: '0 (2023)',
+        annualTarget: '9 productores en 2025',
+        finalTarget: '20 participantes (2027)',
+        actualText: '9 productores innovadores de 6 comunidades de La Asunta participaron en intercambio en Caranavi (45%)',
+        pctVsAnnual: 100.0,
+        pctVsFinal: 45.0,
+        status: 'En Curso (9 de 20 = 45%)',
+        statusClass: 'st-achieved',
+        remarks: 'Intercambio de experiencias productivas, organizacionales y de cafés especiales en el municipio de Caranavi en coordinación con FEPIAC (Anexo 11).'
+      },
+      {
+        proj: 'EU',
+        projName: 'Sistemas Agroecológicos Sostenibles en el Municipio de La Asunta (Unión Europea)',
+        level: 'PRODUCTO',
+        code: 'PROD 3.2',
+        statement: 'Producto 3: Gestión del conocimiento y procesos de innovación desarrollados para asegurar la sostenibilidad de los sistemas agroecológicos y de acceso al mercado.',
+        indicator: 'N° de iniciativas digitales/innovadoras diseñadas para mejorar la producción y/o comercialización de productos',
+        baseline: '0 (2023)',
+        annualTarget: 'Reprogramado 2026-2027',
+        finalTarget: '3 iniciativas digitales (2027)',
+        actualText: '60% de avance en sistematización de base de datos productiva para trazabilidad digital EUDR',
+        pctVsAnnual: 20.0,
+        pctVsFinal: 20.0,
+        status: 'En Sistematización (60%)',
+        statusClass: 'st-progress',
+        remarks: 'Levantamiento georreferenciado de parcelas para cumplimiento del Reglamento Europeo sobre Productos Libres de Deforestación (EUDR); herramientas digitales previstas para 2026.'
+      }
+    ];
+
+    // =========================================================================
+    // 3. ESTADO GLOBAL Y FUNCIONES DE ACTUALIZACIÓN DINÁMICA
+    // =========================================================================
+    let currentProj = 'ALL';
+    let currentLevel = 'ALL';
+
+    let chartTerritoryInstance = null;
+    let chartMilestonesInstance = null;
+    let chartGenderInstance = null;
+    let chartFinancialMainInstance = null;
+    let chartPhysVsFinInstance = null;
+
+    function selectProject(projCode) {
+      currentProj = projCode;
+      document.querySelectorAll('.proj-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById('btn-' + projCode).classList.add('active');
+
+      updateBannerAndKPIs();
+      updateCharts();
+      updateExecutiveAnalysis();
+      renderMonitoringTable();
+    }
+
+    function setLevelFilter(lvl, btn) {
+      currentLevel = lvl;
+      document.querySelectorAll('.lvl-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderMonitoringTable();
+    }
+
+    function updateBannerAndKPIs() {
+      const indLabel = document.getElementById('activeFilterIndicator');
+      const bTag = document.getElementById('bannerTag');
+      const bTitle = document.getElementById('bannerTitle');
+      const bDesc = document.getElementById('bannerDesc');
+      const pFam = document.getElementById('pillFamilies');
+      const pMuni = document.getElementById('pillMunicipalities');
+      const pBud = document.getElementById('pillBudget');
+      const pCount = document.getElementById('pillCounterpart');
+
+      if (currentProj === 'ALL') {
+        indLabel.textContent = 'Mostrando: Programa Consolidado (Ambos Proyectos — 37 Indicadores)';
+        bTag.textContent = 'Visión Integrada del Programa de Desarrollo Alternativo';
+        bTitle.textContent = 'Articulación de Sistemas Agroforestales y Agroecológicos de Café en Los Yungas de La Paz';
+        bDesc.innerHTML = 'El Programa de Desarrollo Alternativo de UNODC en Bolivia articula dos intervenciones complementarias: <strong>1) «Fortalecimiento de las economías locales y control de la expansión de cultivos excedentarios de coca a través del mejoramiento de la productividad y comercialización de café en sistemas agroforestales en Los Yungas»</strong> (KOICA, presupuesto UNODC de <strong>USD 8.132.000</strong>, alcance de <strong>1.500 familias</strong> en <strong>Caranavi, Chulumani y La Asunta</strong>) y <strong>2) «Sistemas Agroecológicos Sostenibles en el Municipio de La Asunta»</strong> (Unión Europea, presupuesto de <strong>EUR 2.000.000</strong>, alcance de <strong>500 familias</strong> exclusivamente en <strong>La Asunta</strong>).';
+        pFam.textContent = '2.000 Familias (1.500 + 500)';
+        pMuni.textContent = 'Caranavi, Chulumani y La Asunta';
+        pBud.textContent = 'USD 8.132.000 + EUR 2.000.000';
+        pCount.textContent = 'MDPRyA (ex MDRyT) / VCDI';
+
+        document.getElementById('kpiTargetFam').textContent = '2.000 Familias';
+        document.getElementById('kpiTargetFamBadge').textContent = '1.500 KOICA + 500 UE';
+        document.getElementById('kpiTargetFamSub').textContent = 'En 2025: 353 nuevas familias seleccionadas (223 KOICA + 130 UE) más 202 productores de continuidad en La Asunta.';
+
+        document.getElementById('kpiMuni').textContent = '3 Municipios';
+        document.getElementById('kpiMuniBadge').textContent = 'Los Yungas (La Paz)';
+        document.getElementById('kpiMuniSub').textContent = 'KOICA: Caranavi, Chulumani y La Asunta (15 com. activas / 35 meta). UE: Exclusivo La Asunta (11 com. nuevas + 35 cont.).';
+
+        document.getElementById('kpiNurseries').textContent = '141 Viveros';
+        document.getElementById('kpiNurseriesBadge').textContent = '288,56 ha en curso';
+        document.getElementById('kpiNurseriesSub').textContent = '26 sitios de almácigo/vivero en KOICA (204,4 ha verificadas) + 115 viveros en UE (84,16 ha agroecológicas).';
+
+        document.getElementById('kpiGardens').textContent = '188 Huertos';
+        document.getElementById('kpiGardensBadge').textContent = 'Seguridad Alimentaria';
+        document.getElementById('kpiGardensSub').textContent = '61 huertos implementados en KOICA (27,4% de seleccionados) + 127 huertos agroecológicos en UE (97,7%).';
+
+        document.getElementById('kpiSales').textContent = '89,12 Tn';
+        document.getElementById('kpiSalesBadge').textContent = 'USD 723.142';
+        document.getElementById('kpiSalesSub').textContent = '4,64 contenedores (ASIPAEM y FEPIAC en La Asunta) exportados a Francia (Malongo), Corea (Guapa) y Bolivia (Lata 16).';
+
+        document.getElementById('kpiFinExec').textContent = '$1.18M / €589K';
+        document.getElementById('kpiFinExecBadge').textContent = 'Ejecución 2024-2025';
+        document.getElementById('kpiFinExecSub').textContent = 'KOICA: USD 1.175.579 ejecutados (14,5% del total; 48,1% cuota 2025). UE: EUR 589.373 (51,1% prog. Años 1-2).';
+
+      } else if (currentProj === 'KOICA') {
+        indLabel.textContent = 'Mostrando: Fortalecimiento de las economías locales... (KOICA — 21 Indicadores)';
+        bTag.textContent = 'Proyecto Financiado por KOICA • Abril 2024 – Abril 2029 (60 Meses)';
+        bTitle.textContent = 'Fortalecimiento de las economías locales y control de la expansión de cultivos excedentarios de coca a través del mejoramiento de la productividad y comercialización de café en sistemas agroforestales en Los Yungas';
+        bDesc.innerHTML = 'Intervención ejecutada en los municipios de <strong>Caranavi, Chulumani y La Asunta</strong> con un presupuesto UNODC de <strong>USD 8.132.000</strong> (Total convenio con M&E KOICA: USD 8.560.000) y una meta de alcance de <strong>1.500 unidades productivas familiares</strong> en el marco del Programa País (y 1.000 agricultores directos / 5.000 personas en PRODOC). En 2025 seleccionó a <strong>223 familias</strong> (29,6% mujeres), instaló <strong>26 sitios de almácigo/vivero (113% de la meta anual)</strong>, <strong>61 huertos hortícolas</strong> y desarrolló <strong>10 cursos asociativos (100% de la meta anual)</strong>.';
+        pFam.textContent = '1.500 Familias Beneficiarias';
+        pMuni.textContent = 'Caranavi, Chulumani y La Asunta';
+        pBud.textContent = 'USD 8.132.000 (UNODC)';
+        pCount.textContent = 'MDPRyA (ex MDRyT) • CGI KOICA';
+
+        document.getElementById('kpiTargetFam').textContent = '1.500 Familias';
+        document.getElementById('kpiTargetFamBadge').textContent = '223 Sel. en 2025';
+        document.getElementById('kpiTargetFamSub').textContent = 'Meta Programa País / Capacitación SAF: 1.500 familias (Caranavi: 89 sel., La Asunta: 79 sel., Chulumani: 55 sel. + 39 en 2da conv.).';
+
+        document.getElementById('kpiMuni').textContent = '3 Municipios';
+        document.getElementById('kpiMuniBadge').textContent = 'Caranavi • Chulumani • La Asunta';
+        document.getElementById('kpiMuniSub').textContent = '35 comunidades objetivo (12 Caranavi, 13 Chulumani, 10 La Asunta). En 2025: 15 comunidades con almácigos activos.';
+
+        document.getElementById('kpiNurseries').textContent = '26 Viveros';
+        document.getElementById('kpiNurseriesBadge').textContent = '113% Meta Anual (23)';
+        document.getElementById('kpiNurseriesSub').textContent = '389,7 kg de semilla sembrada (Castillo, Catuai, Pacamara, Java, Geisha) para 204,4 ha verificadas (Meta final: 39 viveros / 888 ha).';
+
+        document.getElementById('kpiGardens').textContent = '61 Huertos';
+        document.getElementById('kpiGardensBadge').textContent = '27,4% de Seleccionados';
+        document.getElementById('kpiGardensSub').textContent = '130 familias recibieron semillas de 8 especies y 102 fueron capacitadas (40,2% mujeres); 61 huertos ya instalados en campo.';
+
+        document.getElementById('kpiSales').textContent = '10 Cursos / AIPAV';
+        document.getElementById('kpiSalesBadge').textContent = '35,3% Mujeres';
+        document.getElementById('kpiSalesSub').textContent = '100% de la meta anual de cursos asociativos cumplida; Asociación AIPAV constituida en Caranavi y enlaces en EXPOCRUZ, CAMEX y SCA.';
+
+        document.getElementById('kpiFinExec').textContent = 'USD 1.175.579';
+        document.getElementById('kpiFinExecBadge').textContent = '14,46% del Total UNODC';
+        document.getElementById('kpiFinExecSub').textContent = 'Año 1 (2024): USD 126.399,91 | Año 2 (2025): USD 1.049.179,06 (48,14% de la asignación 2025 de USD 2.179.362).';
+
+      } else if (currentProj === 'EU') {
+        indLabel.textContent = 'Mostrando: Sistemas Agroecológicos Sostenibles en el Municipio de La Asunta (UE — 16 Indicadores)';
+        bTag.textContent = 'Proyecto Financiado por la Unión Europea • Convenio NDICI LA/2024/453-179 (Feb 2024 – Ene 2028)';
+        bTitle.textContent = 'Sistemas Agroecológicos Sostenibles en el Municipio de La Asunta';
+        bDesc.innerHTML = 'Intervención focalizada exclusivamente en el <strong>Municipio de La Asunta</strong> (Sud Yungas de La Paz) con un presupuesto de <strong>EUR 2.000.000</strong> y un alcance de <strong>500 familias beneficiarias</strong> (Meta Marco Lógico: 450 UPF con excedentes comercializables y 550 productores capacitados). En su segundo año seleccionó a <strong>130 nuevos productores</strong> (en 11 comunidades y 2 organizaciones) que se suman a los <strong>202 productores en programa orgánico (FEPIAC) y 116 en Fairtrade (ASIPAEM)</strong>, logrando comercializar <strong>89,12 toneladas de café (USD 723.142)</strong>.';
+        pFam.textContent = '500 Familias Beneficiarias';
+        pMuni.textContent = 'Municipio de La Asunta';
+        pBud.textContent = 'EUR 2.000.000 (Unión Europea)';
+        pCount.textContent = 'MDPRyA (ex MDRyT) • CGI UE';
+
+        document.getElementById('kpiTargetFam').textContent = '500 Familias';
+        document.getElementById('kpiTargetFamBadge').textContent = '130 Nuevas + 202 Cont.';
+        document.getElementById('kpiTargetFamSub').textContent = 'Alcance: 500 familias en La Asunta (Meta ML: 450 UPF con excedentes y 550 capacitados; 388 acumulados con capacitación al 2025).';
+
+        document.getElementById('kpiMuni').textContent = '1 Municipio';
+        document.getElementById('kpiMuniBadge').textContent = 'Exclusivo La Asunta';
+        document.getElementById('kpiMuniSub').textContent = 'Federaciones La Asunta y Chamaca: 11 comunidades con nuevos viveros/huertos + 4 organizaciones (FEPIAC, ASIPAEM, AIPACAL, El Rosario).';
+
+        document.getElementById('kpiNurseries').textContent = '115 Viveros';
+        document.getElementById('kpiNurseriesBadge').textContent = '84,16 ha Agroecológicas';
+        document.getElementById('kpiNurseriesSub').textContent = '115 viveros familiares y comunales en desarrollo con variedades Castillo, Java, Pacamara y Geisha (42,1% de la meta de 200 ha).';
+
+        document.getElementById('kpiGardens').textContent = '127 Huertos';
+        document.getElementById('kpiGardensBadge').textContent = '97,7% de Nuevos Sel.';
+        document.getElementById('kpiGardensSub').textContent = '127 familias de 11 comunidades de La Asunta implementaron huertos con 9 variedades de hortalizas libres de agroquímicos.';
+
+        document.getElementById('kpiSales').textContent = '89,12 Tn (4,64 Cont.)';
+        document.getElementById('kpiSalesBadge').textContent = 'USD 723.142 en Ventas';
+        document.getElementById('kpiSalesSub').textContent = 'ASIPAEM: 38,4 Tn a Francia (Malongo) y 9,6 Tn a Corea (Guapa Coffee). FEPIAC: 38,4 Tn a Lata 16 + 2,72 Tn microlotes Java/Geisha.';
+
+        document.getElementById('kpiFinExec').textContent = 'EUR 589.373';
+        document.getElementById('kpiFinExecBadge').textContent = '51,1% Prog. Años 1–2';
+        document.getElementById('kpiFinExecSub').textContent = '100% ejecutado de la 1ra transferencia (€468.739) y 52,5% de la 2da (€120.634 de €229.748). Previsión Año 3: EUR 642.553.';
+      }
+    }
+
+    function updateCharts() {
+      // DESTRUIR INSTANCIAS PREVIAS SI EXISTEN
+      if (chartTerritoryInstance) chartTerritoryInstance.destroy();
+      if (chartMilestonesInstance) chartMilestonesInstance.destroy();
+      if (chartGenderInstance) chartGenderInstance.destroy();
+      if (chartFinancialMainInstance) chartFinancialMainInstance.destroy();
+      if (chartPhysVsFinInstance) chartPhysVsFinInstance.destroy();
+
+      // -----------------------------------------------------------------------
+      // CHART 1: COBERTURA TERRITORIAL Y FAMILIAS BENEFICIARIAS POR MUNICIPIO
+      // -----------------------------------------------------------------------
+      let c1Labels, c1Datasets;
+      if (currentProj === 'ALL') {
+        document.getElementById('titleChart1').textContent = 'Alcance de 2.000 familias: KOICA cubre 3 municipios (1.500 fam.) y la UE focaliza en La Asunta (500 fam.)';
+        c1Labels = ['La Asunta (KOICA + UE)', 'Caranavi (KOICA)', 'Chulumani (KOICA)'];
+        c1Datasets = [
+          {
+            label: 'Alcance Meta Proyecto KOICA (1.500 fam.)',
+            data: [525, 750, 225],
+            backgroundColor: '#94A3B8',
+            borderRadius: 4
+          },
+          {
+            label: 'Alcance Meta Proyecto UE (500 fam.)',
+            data: [500, 0, 0],
+            backgroundColor: '#CBD5E1',
+            borderRadius: 4
+          },
+          {
+            label: 'Familias Seleccionadas Nuevas 2025 (353)',
+            data: [209, 89, 55],
+            backgroundColor: '#005BBB',
+            borderRadius: 4
+          },
+          {
+            label: 'Productores Continuidad Certificación La Asunta (202)',
+            data: [202, 0, 0],
+            backgroundColor: '#009EDB',
+            borderRadius: 4
+          }
+        ];
+      } else if (currentProj === 'KOICA') {
+        document.getElementById('titleChart1').textContent = 'Distribución en los 3 municipios de Los Yungas: 223 familias seleccionadas en 2025 hacia la meta de 1.500';
+        c1Labels = ['Caranavi (12 com.)', 'La Asunta (10 com.)', 'Chulumani (13 com.)'];
+        c1Datasets = [
+          {
+            label: 'Meta de Alcance Capacitación / Programa País (1.500)',
+            data: [750, 525, 225],
+            backgroundColor: '#CBD5E1',
+            borderRadius: 4
+          },
+          {
+            label: 'Meta Directa PRODOC Parcelas SAF (1.000)',
+            data: [350, 500, 150],
+            backgroundColor: '#94A3B8',
+            borderRadius: 4
+          },
+          {
+            label: 'Seleccionados 1ra Convocatoria 2025 (223)',
+            data: [89, 79, 55],
+            backgroundColor: '#005BBB',
+            borderRadius: 4
+          },
+          {
+            label: 'Capacitados en SAF / Café 2025 (164 únicos)',
+            data: [73, 37, 54],
+            backgroundColor: '#009EDB',
+            borderRadius: 4
+          }
+        ];
+      } else {
+        document.getElementById('titleChart1').textContent = 'Intervención exclusiva en el Municipio de La Asunta: 500 familias de alcance entre continuidad y ampliación';
+        c1Labels = [
+          'Alcance Meta Global en La Asunta',
+          'Meta ML Productores Capacitados (2027)',
+          'Meta ML Unidades Productivas EDISC (2027)',
+          'Línea Base Productores La Asunta (2023)',
+          'Productores en Cert. Orgánica FEPIAC (2025)',
+          'Nuevos Seleccionados en 11 Comunidades (2025)'
+        ];
+        c1Datasets = [
+          {
+            label: 'Familias / Productores en el Municipio de La Asunta',
+            data: [500, 550, 450, 250, 202, 130],
+            backgroundColor: ['#0B2545', '#334155', '#64748B', '#94A3B8', '#009EDB', '#005BBB'],
+            borderRadius: 4
+          }
+        ];
+      }
+
+      chartTerritoryInstance = new Chart(document.getElementById('chartTerritory'), {
+        type: 'bar',
+        data: { labels: c1Labels, datasets: c1Datasets },
+        options: {
+          indexAxis: 'y',
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: currentProj !== 'EU',
+              position: 'top',
+              align: 'start',
+              labels: { boxWidth: 10, font: { size: 10, weight: '600' } }
+            },
+            datalabels: {
+              anchor: 'end',
+              align: 'right',
+              formatter: (v) => v > 0 ? v : '',
+              font: { size: 9.5, weight: '700' },
+              color: '#0F172A'
+            }
+          },
+          scales: {
+            x: {
+              max: currentProj === 'EU' ? 640 : 880,
+              grid: { color: '#F1F5F9' },
+              ticks: { font: { size: 10 } }
+            },
+            y: {
+              grid: { display: false },
+              ticks: { font: { size: 10.5, weight: '600' }, color: '#0F172A' }
+            }
+          }
+        }
+      });
+
+      // -----------------------------------------------------------------------
+      // CHART 2: AVANCE PORCENTUAL DE HITOS FÍSICOS CLAVE
+      // -----------------------------------------------------------------------
+      let c2Labels, c2Data, c2Colors;
+      if (currentProj === 'ALL') {
+        c2Labels = [
+          'KOICA • Viveros Implementados (26 de 23 meta anual)',
+          'KOICA • Cursos Asociativos (10 de 10 meta anual)',
+          'UE • Asociaciones Creadas/Fortalecidas (8 de 8 meta)',
+          'UE • Huertos Familiares en Nuevos Sel. (127 de 130)',
+          'UE • Valor Ventas Café ($723.142 de $900.000 meta)',
+          'UE • Productores Capacitados Acum. (388 de 550 meta)',
+          'UE • Volumen Café Comercializado (4,64 de 10 cont.)',
+          'UE • Hectáreas en Vivero para SAF (84,16 de 200 ha)',
+          'KOICA • Huertos Familiares (27,4% vs 70% meta)'
+        ];
+        c2Data = [113.0, 100.0, 100.0, 97.7, 80.3, 70.5, 46.4, 42.1, 39.1];
+      } else if (currentProj === 'KOICA') {
+        c2Labels = [
+          '1.2.1 Viveros / Almácigos (26 vs 23 meta anual)',
+          '2.2.2 Cursos Asociativos (10 vs 10 meta anual)',
+          'Selección Beneficiarios 2025 (223 vs 300 meta anual)',
+          'Diagnóstico Parcelas Productivas (33 de 54 parcelas)',
+          '1.2.1 Viveros vs Meta Final 5 Años (26 de 39)',
+          '1.2 Huertos Implementados (27,4% vs 70% meta)',
+          '2.1.1 Asociaciones 1er Nivel (1 en const. de 3)',
+          '1.1.2 Capacitados Café Mód. 2 (131 vs 900 meta anual)',
+          '1.1.1 Capacitados SAF Mód. 1 (117 vs 900 meta anual)'
+        ];
+        c2Data = [113.0, 100.0, 74.3, 61.1, 66.7, 39.1, 33.3, 14.6, 13.0];
+      } else {
+        c2Labels = [
+          'PROD 2.2 Organizaciones Fortalecidas/Creadas (8 de 8)',
+          'Seguridad Alimentaria: Huertos Instalados (127 de 130)',
+          'PROD 2.1 Valor Ventas Café ($723.142 vs $900K meta)',
+          'RES 1.1 Agricultores con Prácticas Agroec. (377 de 450)',
+          'PROD 1.1 Productores Capacitados Acum. (388 de 550)',
+          'RES 2.2 Alianzas Privadas Comerciales (3 de 4 meta)',
+          'PROD 2.1 Contenedores Comercializados (4,64 de 10)',
+          'PROD 3.1 Intercambio de Experiencias (9 de 20 meta)',
+          'PROD 1.2 Hectáreas Nuevas en Vivero (84,16 de 200 ha)'
+        ];
+        c2Data = [100.0, 97.7, 80.3, 83.8, 70.5, 75.0, 46.4, 45.0, 42.1];
+      }
+      c2Colors = c2Data.map(v => v >= 95 ? '#0B2545' : (v >= 65 ? '#005BBB' : (v >= 40 ? '#009EDB' : '#64748B')));
+
+      chartMilestonesInstance = new Chart(document.getElementById('chartMilestones'), {
+        type: 'bar',
+        data: {
+          labels: c2Labels,
+          datasets: [{
+            label: '% de Avance Físico',
+            data: c2Data,
+            backgroundColor: c2Colors,
+            borderRadius: 4,
+            barPercentage: 0.74
+          }]
+        },
+        options: {
+          indexAxis: 'y',
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            datalabels: {
+              anchor: 'end',
+              align: 'right',
+              formatter: (v) => `${v.toFixed(1)}%`,
+              font: { size: 9.5, weight: '700' },
+              color: '#0B2545'
+            }
+          },
+          scales: {
+            x: {
+              max: 130,
+              grid: { color: '#F1F5F9' },
+              ticks: { callback: (v) => `${v}%`, font: { size: 9.5 } }
+            },
+            y: {
+              grid: { display: false },
+              ticks: { font: { size: 9.8, weight: '600' }, color: '#0F172A' }
+            }
+          }
+        }
+      });
+
+      // -----------------------------------------------------------------------
+      // CHART 3: INCLUSIÓN DE MUJERES Y JÓVENES VS META
+      // -----------------------------------------------------------------------
+      let c3Labels, c3Target, c3Actual;
+      if (currentProj === 'ALL') {
+        c3Labels = [
+          'UE • Mujeres y Jóvenes en Cap. Organizacional (2.4)',
+          'UE • Mujeres y Jóvenes en Cap. Agroecológica (1.3)',
+          'KOICA • Mujeres en Cap. Huertos Hortícolas',
+          'KOICA • Mujeres en Cap. Técnica SAF y Café (1.1.3)',
+          'KOICA • Mujeres en Cap. Asociativa (2.2.3)',
+          'KOICA • Mujeres Titulares Seleccionadas (223 fam.)'
+        ];
+        c3Target = [30.0, 30.0, 20.0, 20.0, 20.0, 30.0];
+        c3Actual = [51.1, 48.0, 40.2, 37.2, 35.3, 29.6];
+      } else if (currentProj === 'KOICA') {
+        c3Labels = [
+          'Cap. Huertos Hortícolas (41 mujeres de 102)',
+          '1.1.3 Cap. Técnica SAF y Café (61 mujeres de 164)',
+          'Cap. Módulo 2 Viveros y Café (48 mujeres de 131)',
+          '2.2.3 Cap. Fortalecimiento Asociativo (18 de 51)',
+          'Cap. Módulo 1 Diseño SAF (39 mujeres de 117)',
+          'Beneficiarias Seleccionadas 2025 (66 mujeres de 223)'
+        ];
+        c3Target = [20.0, 20.0, 20.0, 20.0, 20.0, 30.0];
+        c3Actual = [40.2, 37.2, 36.6, 35.3, 33.3, 29.6];
+      } else {
+        c3Labels = [
+          'PROD 2.4 Mujeres y Jóvenes en Cap. Organizacional (94/184)',
+          'PROD 1.3 Mujeres y Jóvenes en Cap. Agroecológica (66/138)',
+          'Módulo 5: Cosecha y Beneficio (22 mujeres/jóvenes de 31)',
+          'Módulo 1: Importancia del Café (55 mujeres/jóvenes de 97)',
+          'Módulo 7: Caficultura Orgánica (58 mujeres/jóvenes de 103)',
+          'Productoras Titulares en Viveros Nuevos (35 de 115)'
+        ];
+        c3Target = [30.0, 30.0, 30.0, 30.0, 30.0, 30.0];
+        c3Actual = [51.1, 48.0, 71.0, 56.7, 56.3, 30.4];
+      }
+
+      chartGenderInstance = new Chart(document.getElementById('chartGender'), {
+        type: 'bar',
+        data: {
+          labels: c3Labels,
+          datasets: [
+            {
+              label: 'Umbral Meta Marco Lógico (%)',
+              data: c3Target,
+              backgroundColor: '#CBD5E1',
+              borderRadius: 3
+            },
+            {
+              label: '% Logrado en 2025',
+              data: c3Actual,
+              backgroundColor: '#005BBB',
+              borderRadius: 3
+            }
+          ]
+        },
+        options: {
+          indexAxis: 'y',
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'top',
+              align: 'start',
+              labels: { boxWidth: 10, font: { size: 10, weight: '600' } }
+            },
+            datalabels: {
+              anchor: 'end',
+              align: 'right',
+              formatter: (v) => `${v.toFixed(1)}%`,
+              font: { size: 9.5, weight: '700' },
+              color: (ctx) => ctx.datasetIndex === 0 ? '#64748B' : '#0B2545'
+            }
+          },
+          scales: {
+            x: {
+              max: 85,
+              grid: { color: '#F1F5F9' },
+              ticks: { callback: (v) => `${v}%`, font: { size: 9.5 } }
+            },
+            y: {
+              grid: { display: false },
+              ticks: { font: { size: 9.8, weight: '600' }, color: '#0F172A' }
+            }
+          }
+        }
+      });
+
+      // -----------------------------------------------------------------------
+      // CHART 4: EJECUCIÓN FINANCIERA DETALLADA
+      // -----------------------------------------------------------------------
+      let c4Labels, c4Datasets, c4Unit;
+      if (currentProj === 'ALL') {
+        c4Unit = '';
+        c4Labels = [
+          'KOICA • Presupuesto Total UNODC (USD M)',
+          'KOICA • Programado Años 1+2 (USD M)',
+          'KOICA • Asignación Anual 2025 (USD M)',
+          'UE • Presupuesto Total Convenio (EUR M)',
+          'UE • Programado Años 1+2 Anexo III (EUR M)',
+          'UE • Efectivo Transferido Años 1+2 (EUR M)'
+        ];
+        c4Datasets = [
+          {
+            label: 'Presupuesto / Programado (Millones)',
+            data: [8.132, 3.760, 2.179, 2.000, 1.152, 0.698],
+            backgroundColor: '#CBD5E1',
+            borderRadius: 4
+          },
+          {
+            label: 'Ejecutado Devengado Real (Millones)',
+            data: [1.176, 1.176, 1.049, 0.589, 0.589, 0.589],
+            backgroundColor: ['#005BBB', '#005BBB', '#009EDB', '#0B2545', '#0B2545', '#009EDB'],
+            borderRadius: 4
+          }
+        ];
+      } else if (currentProj === 'KOICA') {
+        c4Unit = '$';
+        c4Labels = [
+          'Año 1 (2024): Cuota Inicial',
+          'Año 2 (2025): Cuota Anual',
+          'Acumulado Años 1+2 (2024–2025)',
+          'Año 3 (2026): Proyección',
+          'Años 4+5 (2027–2028): Proyección'
+        ];
+        c4Datasets = [
+          {
+            label: 'Presupuesto Asignado UNODC (USD)',
+            data: [1581053, 2179362, 3760415, 2143402, 2228183],
+            backgroundColor: '#CBD5E1',
+            borderRadius: 4
+          },
+          {
+            label: 'Gasto Ejecutado Real (USD)',
+            data: [126400, 1049179, 1175579, 0, 0],
+            backgroundColor: '#005BBB',
+            borderRadius: 4
+          }
+        ];
+      } else {
+        c4Unit = '€';
+        c4Labels = [
+          '1ra Transferencia UE ( ejecutada 100%)',
+          '2da Transferencia UE (ejecutada 52,5%)',
+          'Total Programado Años 1+2 (Anexo III)',
+          'Previsión Presupuestaria Año 3 (2026-27)',
+          'Presupuesto Total Convenio (2024-2028)'
+        ];
+        c4Datasets = [
+          {
+            label: 'Presupuesto / Transferencia (EUR)',
+            data: [468739, 229748, 1152345, 642553, 2000000],
+            backgroundColor: '#CBD5E1',
+            borderRadius: 4
+          },
+          {
+            label: 'Ejecutado Real / Solicitado (EUR)',
+            data: [468739, 120634, 589373, 533440, 589373],
+            backgroundColor: ['#0B2545', '#005BBB', '#005BBB', '#009EDB', '#0B2545'],
+            borderRadius: 4
+          }
+        ];
+      }
+
+      chartFinancialMainInstance = new Chart(document.getElementById('chartFinancialMain'), {
+        type: 'bar',
+        data: { labels: c4Labels, datasets: c4Datasets },
+        options: {
+          indexAxis: 'y',
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'top',
+              align: 'start',
+              labels: { boxWidth: 10, font: { size: 10, weight: '600' } }
+            },
+            datalabels: {
+              anchor: 'end',
+              align: 'right',
+              formatter: (v) => {
+                if (v === 0) return '';
+                if (currentProj === 'ALL') return `${v.toFixed(2)}M`;
+                return `${c4Unit}${(v/1000).toFixed(1)}K`;
+              },
+              font: { size: 9.2, weight: '700' },
+              color: '#0F172A'
+            }
+          },
+          scales: {
+            x: {
+              max: currentProj === 'ALL' ? 9.5 : (currentProj === 'KOICA' ? 4400000 : 2350000),
+              grid: { color: '#F1F5F9' },
+              ticks: {
+                font: { size: 9.5 },
+                callback: (v) => currentProj === 'ALL' ? `${v}M` : `${c4Unit}${(v/1000).toFixed(0)}K`
+              }
+            },
+            y: {
+              grid: { display: false },
+              ticks: { font: { size: 9.8, weight: '600' }, color: '#0F172A' }
+            }
+          }
+        }
+      });
+
+      // -----------------------------------------------------------------------
+      // CHART 5: CONTRASTE FÍSICO VS FINANCIERO POR PRODUCTO / COMPONENTE
+      // -----------------------------------------------------------------------
+      let c5Labels, c5FinPct, c5PhysPct;
+      if (currentProj === 'KOICA') {
+        document.getElementById('titleChart5').textContent = 'Desglose por Producto (KOICA): Alta ejecución física en Viveros (1.2) y Capacidades (2.2) frente al gasto';
+        c5Labels = [
+          'Prod 1.1: Habilidades SAF ($97,6K / $617,9K)',
+          'Prod 1.2: Base Productiva Viveros ($446,6K / $3,08M)',
+          'Prod 1.3: Beneficio y Secadores ($50,2K / $1,05M)',
+          'Prod 2.1: Asociaciones Cafetaleras ($7,2K / $34,2K)',
+          'Prod 2.2: Capacidades Empresariales ($19,0K / $176,5K)',
+          'Prod 2.3: Cadena de Valor y Ferias ($60,5K / $406,2K)',
+          'Soporte, Monitoreo y Gestión ($494,5K / $2,77M)'
+        ];
+        c5FinPct = [15.8, 14.5, 4.8, 21.1, 10.7, 14.9, 17.8];
+        c5PhysPct = [42.0, 66.7, 5.4, 33.3, 100.0, 25.0, 48.1];
+      } else if (currentProj === 'EU') {
+        document.getElementById('titleChart5').textContent = 'Desempeño en La Asunta (UE): 51,1% de ejecución financiera bienal impulsa hasta 100% en metas asociativas';
+        c5Labels = [
+          'Ejecución Presupuestaria Bienal (EUR 589.373)',
+          'Ejecución sobre Efectivo Transferido (EUR 698.487)',
+          'Prod 1: Productores Capacitados (388 / 550)',
+          'Prod 1: Hectáreas en Vivero (84,16 / 200 ha)',
+          'Prod 2: Asociaciones Fortalecidas/Creadas (8 / 8)',
+          'Prod 2: Volumen Ventas Café (89,12 / 192 Tn)',
+          'Prod 2: Valor Ventas Café ($723K / $900K)'
+        ];
+        c5FinPct = [51.1, 84.4, 51.1, 51.1, 51.1, 51.1, 51.1];
+        c5PhysPct = [51.1, 84.4, 70.5, 42.1, 100.0, 46.4, 80.3];
+      } else {
+        document.getElementById('titleChart5').textContent = 'Comparativa Físico-Financiera por Componente en ambos Proyectos (Corte 2025/2026)';
+        c5Labels = [
+          'KOICA • Cuota Anual 2025 ($1,05M de $2,18M)',
+          'KOICA • Prod 1.2 Viveros (Fin. 14,5% vs Fís. 113% anual)',
+          'KOICA • Prod 2.2 Cursos (Fin. 10,7% vs Fís. 100% anual)',
+          'UE • Bienio 2024-2025 (€589,4K de €1,15M prog.)',
+          'UE • Prod 1 Agroecología y Capacitación (388 / 550)',
+          'UE • Prod 2 Comercialización y Asociaciones'
+        ];
+        c5FinPct = [48.1, 14.5, 10.7, 51.1, 51.1, 51.1];
+        c5PhysPct = [56.0, 113.0, 100.0, 68.5, 70.5, 88.0];
+      }
+
+      chartPhysVsFinInstance = new Chart(document.getElementById('chartPhysVsFin'), {
+        type: 'bar',
+        data: {
+          labels: c5Labels,
+          datasets: [
+            {
+              label: '% Ejecución Financiera',
+              data: c5FinPct,
+              backgroundColor: '#94A3B8',
+              borderRadius: 3
+            },
+            {
+              label: '% Avance / Eficiencia Física',
+              data: c5PhysPct,
+              backgroundColor: '#009EDB',
+              borderRadius: 3
+            }
+          ]
+        },
+        options: {
+          indexAxis: 'y',
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'top',
+              align: 'start',
+              labels: { boxWidth: 10, font: { size: 10, weight: '600' } }
+            },
+            datalabels: {
+              anchor: 'end',
+              align: 'right',
+              formatter: (v) => `${v.toFixed(1)}%`,
+              font: { size: 9.2, weight: '700' },
+              color: (ctx) => ctx.datasetIndex === 0 ? '#475569' : '#0B2545'
+            }
+          },
+          scales: {
+            x: {
+              max: 128,
+              grid: { color: '#F1F5F9' },
+              ticks: { callback: (v) => `${v}%`, font: { size: 9.5 } }
+            },
+            y: {
+              grid: { display: false },
+              ticks: { font: { size: 9.5, weight: '600' }, color: '#0F172A' }
+            }
+          }
+        }
+      });
+    }
+
+    function updateExecutiveAnalysis() {
+      const box = document.getElementById('execAnalysisContainer');
+      if (currentProj === 'KOICA') {
+        box.innerHTML = `
+          <div class="exec-item navy">
+            <h4><span>1. Ejecución Financiera Acumulada (Anexo 2-3)</span><span>USD 1.175.579 (14,5%)</span></h4>
+            <p>Del presupuesto directo UNODC de <strong>USD 8.132.000</strong>, en 2024 se ejecutaron <strong>USD 126.399,91</strong> (8,0% de la 1ra cuota) y en 2025 se devengaron <strong>USD 1.049.179,06</strong> (<strong>48,14%</strong> de la cuota 2025 de USD 2.179.362; 28,87% incluyendo Carry-over).</p>
+          </div>
+          <div class="exec-item cyan">
+            <h4><span>2. Secuenciación Técnica Agronómica</span><span>Viveros 113% vs. Infraestructura 0%</span></h4>
+            <p>Tras el 1er CGI (abril 2025) y la selección de <strong>223 familias</strong> (agosto 2025), se priorizó el Producto 1.2 (<strong>USD 446.614 ejecutados</strong>) para instalar <strong>26 sitios de almácigo/vivero</strong> (389,7 kg de semilla). Los secadores (1.3.1) y plantas de beneficio húmedo (1.3.2) se reprogramaron a 2026 para dimensionarlos sobre las 204,4 ha verificadas.</p>
+          </div>
+          <div class="exec-item">
+            <h4><span>3. Hitos en Asociatividad y Género</span><span>100% Cursos • 35,3% – 37,2% Mujeres</span></h4>
+            <p>Con solo el 10,7% del presupuesto del Producto 2.2 ejecutado (USD 18.973), se cumplió el <strong>100% de la meta anual de cursos (10/10)</strong>, se constituyó <strong>AIPAV en Caranavi</strong> y se superó el umbral de 20% de mujeres tanto en campo (37,2%) como en gestión (35,3%).</p>
+          </div>
+        `;
+      } else if (currentProj === 'EU') {
+        box.innerHTML = `
+          <div class="exec-item navy">
+            <h4><span>1. Ejecución Presupuestaria Bienal (Anexo III)</span><span>EUR 589.373 (51,1%)</span></h4>
+            <p>Sobre el presupuesto total de <strong>EUR 2.000.000</strong>, el gasto acumulado al 31/01/2026 (<strong>EUR 589.373</strong>) representa el <strong>51,1%</strong> de lo programado para los dos primeros años (EUR 1.152.345) y el <strong>84,4% del efectivo transferido</strong> (100% de la 1ra transferencia de €468.739 y 52,5% de la 2da de €229.748).</p>
+          </div>
+          <div class="exec-item cyan">
+            <h4><span>2. Alto Retorno Comercial y Asociativo</span><span>USD 723.142 en Ventas (89,12 Tn)</span></h4>
+            <p>Con el 29,5% del presupuesto total de 4 años devengado, las organizaciones <strong>ASIPAEM y FEPIAC</strong> alcanzaron el <strong>46,4% de la meta física de exportación (4,64 de 10 contenedores)</strong> y el <strong>80,3% de la meta monetaria (USD 723.142 de USD 900.000)</strong> en Francia, Corea del Sur y Bolivia, además de crear <strong>AIPACAL</strong> (8/8 organizaciones = 100%).</p>
+          </div>
+          <div class="exec-item">
+            <h4><span>3. Previsión Financiera Año 3 (2026–2027)</span><span>Proyección: EUR 642.553</span></h4>
+            <p>Con un saldo en cuenta de <strong>EUR 109.114</strong>, se solicita un desembolso de <strong>EUR 533.440</strong> para financiar el trasplante definitivo de las <strong>84,16 ha agroecológicas</strong> (115 viveros), la entrega de 15 despulpadoras, 100 secadores y el equipamiento de emprendimientos de mujeres y jóvenes.</p>
+          </div>
+        `;
+      } else {
+        box.innerHTML = `
+          <div class="exec-item navy">
+            <h4><span>1. Balance Financiero Consolidado</span><span>$1.175.579 USD + €589.373 EUR</span></h4>
+            <p>En <strong>Los Yungas (KOICA)</strong> se devengaron <strong>USD 1.175.579</strong> (48,1% de la cuota 2025; 14,5% del total de USD 8.132.000). En <strong>La Asunta (UE)</strong> se ejecutaron <strong>EUR 589.373</strong> (51,1% del programado bienal de EUR 1.152.345; 84,4% de lo transferido).</p>
+          </div>
+          <div class="exec-item cyan">
+            <h4><span>2. Coherencia Físico-Financiera en Campo</span><span>141 Viveros • 188 Huertos • 288,6 ha</span></h4>
+            <p>Ambos proyectos completaron en 2025 sus Comités de Gobernanza (CGI en abril 2025), seleccionaron a <strong>353 nuevas familias</strong> (223 KOICA + 130 UE) y priorizaron la inversión biológica (semillas certificadas, viveros y análisis de suelos) antes de ejecutar obras civiles de beneficio húmedo y secado en 2026.</p>
+          </div>
+          <div class="exec-item">
+            <h4><span>3. Sinergia Comercial y Certificaciones</span><span>Fairtrade • Orgánico • EUDR</span></h4>
+            <p>La base consolidada en La Asunta (202 socios de FEPIAC en certificación orgánica IMOCERT y 116 de ASIPAEM en Fairtrade FLOCERT) generó <strong>USD 723.142</strong> en ventas (Malongo, Guapa Coffee y Lata 16), abriendo canales de exportación que apalancarán a Caranavi y Chulumani desde 2026.</p>
+          </div>
+        `;
+      }
+    }
+
+    // =========================================================================
+    // 4. RENDERIZADO DE LA TABLA DEL MARCO DE MONITOREO (100% INDICADORES)
+    // =========================================================================
+    function renderMonitoringTable() {
+      const tbody = document.getElementById('mfTableBody');
+      const query = (document.getElementById('mfSearchInput').value || '').toLowerCase();
+
+      const filtered = monitoringData.filter(item => {
+        const matchProj = currentProj === 'ALL' || item.proj === currentProj;
+        const matchLevel =
+          currentLevel === 'ALL' ||
+          (currentLevel === 'ACHIEVED' && item.pctVsAnnual > 0) ||
+          item.level === currentLevel;
+        const matchQuery =
+          item.code.toLowerCase().includes(query) ||
+          item.statement.toLowerCase().includes(query) ||
+          item.indicator.toLowerCase().includes(query) ||
+          item.actualText.toLowerCase().includes(query) ||
+          item.remarks.toLowerCase().includes(query);
+
+        return matchProj && matchLevel && matchQuery;
+      });
+
+      // Actualizar contadores de la franja resumen según el proyecto activo
+      const baseProjList = monitoringData.filter(d => currentProj === 'ALL' || d.proj === currentProj);
+      const countObj = baseProjList.filter(d => d.level === 'OBJETIVO').length;
+      const countRes = baseProjList.filter(d => d.level === 'RESULTADO').length;
+      const countProd = baseProjList.filter(d => d.level === 'PRODUCTO').length;
+      const countActive = baseProjList.filter(d => d.pctVsAnnual > 0 || d.statusClass !== 'st-scheduled').length;
+      const countSched = baseProjList.length - countActive;
+
+      document.getElementById('statTotalInd').textContent = `${baseProjList.length} Indicadores (100%)`;
+      document.getElementById('statObjInd').textContent = `${countObj} Indicadores`;
+      document.getElementById('statResInd').textContent = `${countRes} Indicadores`;
+      document.getElementById('statProdInd').textContent = `${countProd} Indicadores`;
+      document.getElementById('statActiveInd').textContent = `${countActive} con Avance / ${countSched} Prog. Años 3–5`;
+
+      tbody.innerHTML = filtered.map(item => {
+        const lvlBadge = item.level === 'OBJETIVO'
+          ? `<span class="badge-level lvl-obj">OBJETIVO</span>`
+          : (item.level === 'RESULTADO'
+              ? `<span class="badge-level lvl-res">RESULTADO</span>`
+              : `<span class="badge-level lvl-prod">PRODUCTO</span>`);
+
+        const projShort = item.proj === 'KOICA'
+          ? `<span class="proj-pill-sm" title="${item.projName}">Los Yungas (KOICA)</span>`
+          : `<span class="proj-pill-sm" title="${item.projName}">La Asunta (UE)</span>`;
+
+        const displayPct = item.pctVsAnnual > 0 ? item.pctVsAnnual : item.pctVsFinal;
+        const barWidth = Math.min(displayPct, 100);
+        const barColor = displayPct >= 100 ? '#0B2545' : (displayPct >= 50 ? '#005BBB' : (displayPct > 0 ? '#009EDB' : '#94A3B8'));
+
+        return `
+          <tr>
+            <td>${projShort}</td>
+            <td>${lvlBadge}</td>
+            <td><strong style="color:var(--un-navy);">${item.code}</strong></td>
+            <td style="font-size:0.73rem; color:var(--slate-700); font-weight:500;">${item.statement}</td>
+            <td style="font-weight:700; color:var(--slate-900);">${item.indicator}</td>
+            <td style="color:var(--slate-600); font-weight:600;">${item.baseline}</td>
+            <td style="color:var(--slate-700); font-weight:600;">${item.annualTarget}</td>
+            <td style="color:var(--un-navy); font-weight:700;">${item.finalTarget}</td>
+            <td style="color:var(--un-blue); font-weight:700;">${item.actualText}</td>
+            <td class="prog-cell">
+              <div class="prog-bar-wrap">
+                <div class="prog-track">
+                  <div class="prog-fill" style="width:${barWidth}%; background:${barColor};"></div>
+                </div>
+                <span class="prog-pct" style="color:${barColor};">${displayPct.toFixed(0)}%</span>
+              </div>
+            </td>
+            <td><span class="st-pill ${item.statusClass}">${item.status}</span></td>
+            <td style="font-size:0.72rem; color:var(--slate-600);">${item.remarks}</td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function exportMonitoringCSV() {
+      const headers = ['Proyecto', 'Nivel', 'Codigo', 'Enunciado_Cadena_Resultados', 'Indicador', 'Linea_Base', 'Meta_Anual_2025', 'Meta_Final', 'Avance_2025', 'Porcentaje_Cumplimiento', 'Estado', 'Observaciones'];
+      const rows = monitoringData
+        .filter(d => currentProj === 'ALL' || d.proj === currentProj)
+        .map(d => [
+          `"${d.projName}"`,
+          `"${d.level}"`,
+          `"${d.code}"`,
+          `"${d.statement.replace(/"/g, '""')}"`,
+          `"${d.indicator.replace(/"/g, '""')}"`,
+          `"${d.baseline}"`,
+          `"${d.annualTarget}"`,
+          `"${d.finalTarget}"`,
+          `"${d.actualText.replace(/"/g, '""')}"`,
+          `"${(d.pctVsAnnual > 0 ? d.pctVsAnnual : d.pctVsFinal).toFixed(1)}%"`,
+          `"${d.status}"`,
+          `"${d.remarks.replace(/"/g, '""')}"`
+        ].join(','));
+
+      const csvContent = "\uFEFF" + [headers.join(','), ...rows].join('\n');
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `Marco_Monitoreo_Desarrollo_Alternativo_UNODC_${currentProj}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+
+    // Inicializar al cargar
+    window.addEventListener('DOMContentLoaded', () => {
+      selectProject('ALL');
+    });
+  </script>
+</body>
+</html>
